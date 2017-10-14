@@ -1,0 +1,43 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+/**QQ钱包二维码页面样式    -----------start--------*/
+.zfjediv{overflow:hidden;width:80%;border-radius: 0.3rem;background:#fff;box-shadow:0 0.2rem 0.3rem #ddd;padding:1rem;margin:1rem auto 0;}
+.zfjediv dd{width:100%;overflow: hidden;}
+.zfjediv label{display:block;float:left;font:0.8rem/2rem "微软雅黑";color:#888;width:60%;margin:0 0 0 0.3rem;}
+.zfjediv span{display:block;float:left;font:0.8rem/2rem "微软雅黑";color:#a1a1a1;width:25%;text-align: right;}
+.zfjediv i{display:block;float:left;font:0.8rem/2rem "微软雅黑";color:#888;width:20%;}
+.zfjediv input{float:left;padding:0 0.3rem;margin:0 0.3rem;width:40%;height:1.8rem;border:1px solid #eee;font-size: 1rem;color:#c41010;}
+.zffsdiv{width:100%;background:#fff;margin:1rem 0 0 0;border-top: 1px solid #eee;}
+.zffsdiv dl{padding:0.5rem 6%;width:88%;border-bottom: 1px solid #eee;overflow:hidden;}
+.zffsdiv img{float:left;width:2.2rem;margin:0.1rem 0.8rem 0 0;}
+.zffsdiv dd{float:left;width:70%;}
+.zffsdiv dd span{display:block;font:1rem/1.4rem "微软雅黑";color:#333;}
+.zffsdiv dd p{display:block;font:0.6rem/1rem "微软雅黑";color:#888;}
+.zffsxz{float:right;position:relative;margin:0.4rem 0 0 0;}
+.zffsxz input{opacity: 0;float:left;width:1.6rem;height:1.6rem;}
+.zffsxz input[type="radio"]:checked + label {background:url(../images/xx_1.png) no-repeat; background-size:100% 100%;}
+.zffsxz label {left:0;background:url(../images/xx_0.png) no-repeat; background-size:100% 100%; cursor: pointer; height: 1.6rem; width: 1.6rem; z-index:1; position:absolute;}
+.syggdiv{width:100%;overflow: hidden;}
+.syggdiv a{display: block;overflow: hidden;}
+.syggdiv img{width:100%;}
+
+.zfndiv{width:100%;overflow: hidden;}
+.zfndiv .zflog{width:90%;overflow: hidden;border-bottom:1px solid #ddd;padding:1rem 5%;}
+.zflog img{display: block;float:left;height:2.5rem;}
+.zfndiv .zfnr{width:90%;overflow: hidden;margin:0 auto;}
+.zfnr .zftit{width:100%;overflow: hidden;}
+.zftit span{font:0.8rem/3rem "微软雅黑";color:#888;display: block;text-align: center;}
+.zftit span i{font:0.8rem/3rem "微软雅黑";color:#f0b108;}
+.zfnr .zfje{width:100%;overflow: hidden;}
+.zfje span{font:1.2rem/2rem "微软雅黑";color:#222;display: block;text-align: center;}
+.zfje span i{font:2rem/2rem "微软雅黑";color:#ea1616;}
+.zfnr .zfewm{width:75%;margin:1.5rem auto;overflow: hidden;border:0.6rem solid #fff;}
+.zfewm img{width:100%;display: block;}
+.zfnr .zfsm{width:50%;margin:0 auto;overflow: hidden;}
+.zfsm img{float:left;width:2.5rem;}
+.zfsm span{float:left;display: block;font:1rem/1.25rem "微软雅黑";color:#888;margin:0 0 0 0.5rem;}
+
+.zfts{width:100%;overflow: hidden;}
+.zfts span{display: block;font-size: 1rem;line-height: 2rem;text-align: center;color:#888;}
+/**QQ钱包二维码页面样式    -----------end--------*/

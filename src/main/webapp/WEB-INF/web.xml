@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" 
+xmlns:web="http://java.sun.com/xml/ns/javaee" 
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <display-name>SpringMVC</display-name>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+			classpath*:spring/applicationContext.xml
+		</param-value>
+  </context-param>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>com.epay.scanpay.common.listeners.InitListener</listener-class>
+  </listener>
+	<!-- 定义LOG4J监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+  <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>ajaxSessionFilter</filter-name>
+    <filter-class>com.epay.scanpay.common.filter.AjaxSessionFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>ajaxSessionFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+    <filter>
+    <filter-name>loginFilter</filter-name>
+    <filter-class>com.epay.scanpay.common.filter.LoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>loginFilter</filter-name>
+    <url-pattern>/user/*</url-pattern>
+  </filter-mapping> 
+  <filter-mapping>
+    <filter-name>loginFilter</filter-name>
+    <url-pattern>/shop/*</url-pattern>
+  </filter-mapping> 
+  
+  <servlet>
+    <servlet-name>springServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath*:spring/spring-mvc.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>springServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 通用图片的处理 -->
+  <servlet>
+		<servlet-name>fileServlet</servlet-name>
+		<servlet-class>com.epay.scanpay.common.utils.FileServlet</servlet-class>
+		<init-param>
+			<param-name>url-pattern</param-name>
+			<param-value>/file_servelt</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>fileServlet</servlet-name>
+		<url-pattern>/file_servelt/*</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 配置支付码图片处理 -->
+	<servlet>
+		<servlet-name>fileEpayQRCodeServlet</servlet-name>
+		<servlet-class>com.epay.scanpay.common.utils.FileServlet</servlet-class>
+		<init-param>
+			<param-name>url-pattern</param-name>
+			<param-value>/file_epay_qrcode</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>fileEpayQRCodeServlet</servlet-name>
+		<url-pattern>/file_epay_qrcode/*</url-pattern>
+	</servlet-mapping>
+  
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+  <error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/WEB-INF/views/error/error.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/WEB-INF/views/error/error.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/WEB-INF/views/error/error.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>405</error-code>
+    <location>/WEB-INF/views/error/error.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>401</error-code>
+    <location>/WEB-INF/views/error/error.jsp</location>
+  </error-page>
+  
+  <!-- 自定义EL表达式 -->
+  <jsp-config>
+      <taglib>
+          <!-- 定义标签的引用地址，JSP页面时会用到  ,
+          和tld文件的地址保持一致！但是tld文件中可以省略不写-->
+          <taglib-uri>/myeltag</taglib-uri>
+          <!-- 配置标签的TLD文件地址 -->
+          <taglib-location>/WEB-INF/tld/function.tld</taglib-location>
+      </taglib>
+  </jsp-config>
+</web-app>
