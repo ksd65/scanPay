@@ -10,6 +10,7 @@ public class SysConfig {
  public static String pospService;
  public static String baseUploadFilePath;
  public static String epayCodePath;
+ public static String channel;
 	/**
 	 * 初始化系统配置
 	 */
@@ -20,6 +21,7 @@ public class SysConfig {
 			pospService = configuration.getString("pospService");
 			baseUploadFilePath = configuration.getString("baseUploadFilePath");
 			epayCodePath = configuration.getString("epayCodePath");
+			channel = configuration.getString("channel");
 		} catch (Exception e) {
 			throw new RuntimeException("[加载配置文件失败]", e);
 		}

@@ -50,7 +50,12 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 		modelMap.put("epayCode", epayCode);
 		modelMap.put("oemName", oemName);
 		if (oemName==null || oemName==""){
-			register="register";
+			if("ESK".equals(SysConfig.channel)){
+				register="registerEsk";
+			}else{
+				register="register";
+			}
+			
 		}else{
 			register=oemName+"/register";
 		}
@@ -120,6 +125,10 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 		String payCode = null;
 		String certFilePath = null;
 		String cardFilePath = null;
+		String certOppoFilePath = null;
+		String cardOppoFilePath = null;
+		String blFilePath = null;
+		String authFilePath = null;
 		String merchantName = null;
 		String shortName = null;
 		String settleType = null;
@@ -127,6 +136,7 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 		String contactType=null;
 		String agentType=null;
 		String agentCode=null;
+		String bankArea=null;
 		JSONObject result = new JSONObject();
 		JSONObject reqData=new JSONObject();
 		try {
@@ -148,7 +158,7 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 			shortName = request.getParameter("shortName");
 			settleType = request.getParameter("settleType");
 			agentType = request.getParameter("agentType");
-			
+			bankArea = request.getParameter("bankArea");
 			
 			String fileParentPath = "/member/" ;
 			MultipartHttpServletRequest requestFiles = (MultipartHttpServletRequest) request;//request强制转换注意
@@ -160,6 +170,26 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 			MultipartFile cardImg = requestFiles.getFile("cardImg");
 			if(null != cardImg && !cardImg.isEmpty()){
 				cardFilePath = saveImgFile(cardImg, fileParentPath,baseFilePath);
+			}
+			
+			MultipartFile certOppoImg = requestFiles.getFile("certOppoImg");
+			if(null != certOppoImg && !certOppoImg.isEmpty()){
+				certOppoFilePath = saveImgFile(certOppoImg, fileParentPath,baseFilePath);
+			}
+			
+			MultipartFile cardOppoImg = requestFiles.getFile("cardOppoImg");
+			if(null != cardOppoImg && !cardOppoImg.isEmpty()){
+				cardOppoFilePath = saveImgFile(cardOppoImg, fileParentPath,baseFilePath);
+			}
+			
+			MultipartFile blImg = requestFiles.getFile("blImg");
+			if(null != blImg && !blImg.isEmpty()){
+				blFilePath = saveImgFile(blImg, fileParentPath,baseFilePath);
+			}
+			
+			MultipartFile authImg = requestFiles.getFile("authImg");
+			if(null != authImg && !authImg.isEmpty()){
+				authFilePath = saveImgFile(authImg, fileParentPath,baseFilePath);
 			}
 			
 			if("".equals(memberName)){
@@ -208,6 +238,26 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 				throw new ArgException("开户银行不能为空");
 			}
 			
+			if("ESK".equals(SysConfig.channel)){
+				if(certFilePath==null){
+					throw new ArgException("身份证正面照不能为空");
+				}
+				if(certOppoFilePath==null){
+					throw new ArgException("身份证背面照不能为空");
+				}
+				if(cardFilePath==null){
+					throw new ArgException("银行卡正面照不能为空");
+				}
+				if(cardOppoFilePath==null){
+					throw new ArgException("银行卡背面照不能为空");
+				}
+				if(blFilePath==null){
+					throw new ArgException("营业执照不能为空");
+				}
+				if(!"01".equals(contactType)&&authFilePath==null){
+					throw new ArgException("授权书照片不能为空");
+				}
+			}
 //			if("".equals(subId)){
 //				throw new ArgException("开户支行不能为空");
 //			}
@@ -249,11 +299,16 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 			registerTmp.setContactType(contactType);
 			registerTmp.setBusLicenceNbr(busLicenceNbr);//增加营业执照项
 			
+			registerTmp.setBankOpen(bankArea);
 			registerTmp.setBankId(bankId);
 			registerTmp.setSubId(subId);
 			registerTmp.setMobilePhone(mobilePhone);
 			registerTmp.setCertPic1(certFilePath);
+			registerTmp.setCertPic2(certOppoFilePath);
 			registerTmp.setCardPic1(cardFilePath);
+			registerTmp.setCardPic2(cardOppoFilePath);
+			registerTmp.setMemcertPic(blFilePath);
+			registerTmp.setAuthPic(authFilePath);
 			registerTmp.setAccountName(memberName);
 			registerTmp.setAccountNumber(cardNbr);
 			
