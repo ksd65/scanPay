@@ -76,7 +76,7 @@ public class DebitNoteController {
 				|| (ua.indexOf("applewebkit") != -1 && ua.indexOf("qq") != -1) 
 				|| ua.indexOf("baiduwallet") > 0 || ua.indexOf("application=jdjr-app") > 0)) {
 			model.addAttribute("resultMessage", "请选择支付宝、微信、手机QQ、百度钱包或京东金融进行扫描");
-			return scanResult;
+			return scanResult; // by linxf 先屏蔽
 		}
 
 		JSONObject responseJson = JSONObject.fromObject(
@@ -173,6 +173,20 @@ public class DebitNoteController {
 		}
 		model.addAttribute("epayCode", epayCode);
 		model.addAttribute("oemName", oemName);
+		
+		if("ESK".equals(SysConfig.channel)){
+			JSONObject resJson = JSONObject.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService + "/api/debitNote/oneCodePay",
+							CommonUtil.createSecurityRequstData(reqData)));
+			if ("0000".equals(resJson.getString("returnCode"))) {
+				String codePath = resJson.getString("qrCode");
+				return "redirect:" + codePath;
+			}else{
+				model.addAttribute("resultMessage", responseJson.getString("returnMsg"));
+				return scanResult;
+			}
+		}
+		
+		
 		// return "/debitNote/index";
 		return index;
 

@@ -42,7 +42,7 @@
 		<dl>
 			<span>联系人类型</span>
 			<div class="setsb">
-				<select name="select_c">
+				<select name="select_c" id="select_c">
 				<option value="">请选择联系人类型</option>
 				<option value="01">法人</option>
 				<option value="02">实际控制人</option>
@@ -144,7 +144,7 @@
 	<input type="hidden" name="oemName" value="${oemName }">
 	<input type="button" class="zcimsbut" value="下一步" onclick="stepChange(1)">
 </div>
-<div id="stepChangeBlock" style="display: none;position: fixed;top:0;height: 100%;width: 100%;background-color: #f8f8f8;">
+<div id="stepChangeBlock" style="display: none;position: absolute;top:0;height: auto;width: 100%;background-color: #f8f8f8;">
 	<div class="zcimsdiv">
 		<div class="zcimscon">
 			<%--<dl>
@@ -237,7 +237,7 @@
 				<div class="imgbox">
 				    <div class="imgnum">
 				        <input id="uploadCertOppoImg" type="file"  accept="image/*" class="filepath" name="certOppoImg"/>
-				        <img src="images/sfz.png" class="img1" />
+				        <img src="images/sfzback.png" class="img1" />
 				        <img id="uploadCertOppoImg_Path" src="" class="img2" />
 				    </div>
 				</div>
@@ -261,7 +261,7 @@
 				<div class="imgbox">
 				    <div class="imgnum">
 				        <input id="uploadCardOppoImg" type="file"  accept="image/*" class="filepath" name="cardOppoImg"/>
-				        <img src="images/yhk.png" class="img1" />
+				        <img src="images/yhkback.png" class="img1" />
 				        <img id="uploadCardOppoImg_Path" src="" class="img2" />
 				    </div>
 				</div>
@@ -273,19 +273,19 @@
 				<div class="imgbox">
 				    <div class="imgnum">
 				        <input id="uploadBlImg" type="file"  accept="image/*" class="filepath" name="blImg"/>
-				        <img src="images/yhk.png" class="img1" />
+				        <img src="images/bl.png" class="img1" />
 				        <img id="uploadBlImg_Path" src="" class="img2" />
 				    </div>
 				</div>
 			</div>
 			<span>营业执照</span>
 		</div>
-		<div class="ttsccon sqs">
+		<div class="ttsccon sqs" style="display: none">
 			<div id="img">
 				<div class="imgbox">
 				    <div class="imgnum">
 				        <input id="uploadAuthImg" type="file"  accept="image/*" class="filepath" name="authImg"/>
-				        <img src="images/yhk.png" class="img1" />
+				        <img src="images/auth.png" class="img1" />
 				        <img id="uploadAuthImg_Path" src="" class="img2" />
 				    </div>
 				</div>
@@ -686,7 +686,7 @@ function addr_cityChange(cityVal){
 			alert("请填写收款卡号");
 			return ;
 		}
-		/*var province = $.trim($("select[name='province']").val());
+		var province = $.trim($("select[name='province']").val());
 		if("" == province){
 			alert("请选择开户区域省份信息");
 			return ;
@@ -695,7 +695,7 @@ function addr_cityChange(cityVal){
 		if("" == city){
 			alert("请选择开户区域市县信息");
 			return ;
-		}*/
+		}
 		var settleType = $.trim($("select[name='settleType']").val());
 		if("" == settleType){
 			alert("请选择结算方式");
@@ -721,16 +721,39 @@ function addr_cityChange(cityVal){
 			alert("请填写验证码");
 			return ;
 		} 
-		/* var certFilePath = $("#uploadCertImg").val();
+		var certFilePath = $("#uploadCertImg").val();
 		if(certFilePath.length == 0){
 			alert("请上传身份证正面照片");
+			return ;
+		}
+		var certFilePath1 = $("#uploadCertOppoImg").val();
+		if(certFilePath1.length == 0){
+			alert("请上传身份证背面照片");
 			return ;
 		}
 		var cardFilePath = $("#uploadCardImg").val();
 		if(cardFilePath.length == 0){
 			alert("请上传银行卡正面照片");
 			return ;
-		}  */
+		}  
+		var certFilePath1 = $("#uploadCardOppoImg").val();
+		if(certFilePath1.length == 0){
+			alert("请上传银行卡背面照片");
+			return ;
+		}
+		var blFilePath = $("#uploadBlImg").val();
+		if(blFilePath.length == 0){
+			alert("请上传营业执照照片");
+			return ;
+		}
+		if(select_c!="01"){
+			var authFilePath = $("#uploadAuthImg").val();
+			if(authFilePath.length == 0){
+				alert("请上传授权书照片");
+				return ;
+			}
+		}
+		
 		if(!$("#checkboxFourInput").is(":checked")){
 			alert("请勾选同意用户服务协议");
 			return ;
@@ -780,6 +803,11 @@ function getObjectURL(file) {
 function stepChange(type){
 	if(type == 1){
 		$("#stepChangeBlock").show();
+		if($("#select_c").val()=="01"){
+			$(".sqs").hide();
+		}else{
+			$(".sqs").show();
+		}
 	}else{
 		$("#stepChangeBlock").hide();
 	}
