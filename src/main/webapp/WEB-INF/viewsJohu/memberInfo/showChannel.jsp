@@ -52,13 +52,15 @@
 					<c:choose>
 						<c:when test="${resData.memberInfo.status=='0'}">已认证</c:when>
 						<c:when test="${resData.memberInfo.status=='4'}">未认证</c:when>
+						<c:when test="${resData.memberInfo.status=='3'}">审核中</c:when>
 						<c:otherwise>已停用</c:otherwise>
 					</c:choose>
 				</span>
 				<span>${resData.memberInfo.drawStatus=='1'?'关闭':'启用'}</span>
-				<span><c:if test="${resData.memberInfo.status=='4' || resData.memberInfo.drawStatus=='1'}">
+				<span>
+				<!--<c:if test="${resData.memberInfo.status=='4' || resData.memberInfo.drawStatus=='1'}">
 					<a href="javascript:void(0);" onclick="toBindCard()">信用卡认证</a>
-				</c:if></span>
+				</c:if>--></span>
 			</dl>
 		</div>
 		<div class="shztfltit">
@@ -113,7 +115,7 @@
 			<c:if test="${empty resData.memberInfo.zfbMerchantCode }"><i class="shz">审核中</i></c:if>
 			<c:if test="${not empty resData.memberInfo.zfbMerchantCode }"><i class="zc">已开通</i></c:if>
 		</li>
-		<li>
+	<!-- 	<li>
 			<img src="${ctx }/johu/images/qq.png" >
 			<span>QQ钱包</span>
 			<c:if test="${empty resData.memberInfo.qqMerchantCode }"><i class="shz">审核中</i></c:if>
@@ -136,7 +138,7 @@
 			<span>银联快捷</span>
 			<c:if test="${empty resData.memberInfo.mlJfStatus }"><i class="shz">审核中</i></c:if>
 			<c:if test="${not empty resData.memberInfo.mlJfStatus }"><i class="zc">已开通</i></c:if>
-		</li>
+		</li> -->
 	</ul>
 </div>
 </body>
