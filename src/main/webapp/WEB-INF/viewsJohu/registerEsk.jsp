@@ -438,7 +438,7 @@ function addr_cityChange(cityVal){
 	function cityChange(cityVal,obj){
 		$("select[name='subId']").html("<option value=''>请选择开户支行</option>");
 		if("" != cityVal){
-			$("#bankArea").val($(obj).find("option:selected").text());alert($("#bankArea").val());
+			$("#bankArea").val($(obj).find("option:selected").text());
 			var settleType = $("select[name=settleType]").val();
 			if(settleType == ""){
 				getBankList(null,"bankId",null);
