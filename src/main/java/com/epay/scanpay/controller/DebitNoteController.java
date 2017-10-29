@@ -129,9 +129,12 @@ public class DebitNoteController {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			return "redirect:https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + WxConfig.appid
-					+ "&redirect_uri=" + redirectUrl + "&response_type=code&scope=snsapi_base&state=" + state
-					+ "#wechat_redirect";
+			if(!"ESK".equals(SysConfig.channel)){
+				return "redirect:https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + WxConfig.appid
+						+ "&redirect_uri=" + redirectUrl + "&response_type=code&scope=snsapi_base&state=" + state
+						+ "#wechat_redirect";
+			}
+			
 			/*
 			 * model.addAttribute("memberId",
 			 * responseJson.getJSONObject("resData").getString("memberId"));
@@ -154,9 +157,11 @@ public class DebitNoteController {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			return "redirect:https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id="
+			if(!"ESK".equals(SysConfig.channel)){
+				return "redirect:https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id="
 					+ AlipayServiceEnvConstants.APP_ID + "&state=" + state + "&scope=auth_base&redirect_uri="
 					+ redirectUrl;
+			}
 		} else if (ua.indexOf("application=jdjr-app") > 0) {//放在qq前面，因为ua里面有和qq相同的字符串
 			model.addAttribute("memberId", responseJson.getJSONObject("resData").getString("memberId"));
 			model.addAttribute("memberName", responseJson.getJSONObject("resData").getString("memberName"));
