@@ -299,7 +299,7 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 			registerTmp.setContactType(contactType);
 			registerTmp.setBusLicenceNbr(busLicenceNbr);//增加营业执照项
 			
-			registerTmp.setBankOpen(bankArea);
+			registerTmp.setBankArea(bankArea);
 			registerTmp.setBankId(bankId);
 			registerTmp.setSubId(subId);
 			registerTmp.setMobilePhone(mobilePhone);
