@@ -85,7 +85,7 @@
 								function(result){
 // 									var str = JSON.stringify(result);
 // 									alert(str);
-									location.href=location.href = "${ctx}/debitNote/payCallBack?orderCode="
+									location.href = "${ctx}/debitNote/payCallBack?orderCode="
 										+ data.resData.orderCode;
 								});
 					}

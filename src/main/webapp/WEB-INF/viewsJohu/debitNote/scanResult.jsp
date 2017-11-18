@@ -19,5 +19,17 @@
 <h3 style="color: red;">${resultMessage}</h3>
 </div>
 
+<script type="text/javascript" lang="javascript">
+function refresh(){
+	location.href = "${ctx}/debitNote/payCallBack?orderCode=${orderCode}&refresh=1";
+}
+var oriRespType = '${oriRespType}';
+var flag = '${refresh}';
+if(oriRespType=='R'&&(flag!='1')){
+	var t1 = window.setTimeout("refresh()",3000);
+}
+
+
+</script>
 </body>
 </html>

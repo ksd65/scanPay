@@ -523,6 +523,8 @@ public class DebitNoteController {
 			} else {
 				if ("R".equals(resData.getString("oriRespType"))) {
 					resultMessage = "您的支付正处理中.......";
+					model.addAttribute("oriRespType", "R");
+					model.addAttribute("refresh", request.getParameter("refresh"));
 				} else {
 					resultMessage = "亲，支付失败啦，请重新支付!";
 				}
@@ -534,6 +536,7 @@ public class DebitNoteController {
 		// model.addAttribute("shortName", memberInfo.getShortName());
 		model.addAttribute("totalAmount", totalAmount);
 		model.addAttribute("resultMessage", resultMessage);
+		model.addAttribute("orderCode", request.getParameter("orderCode"));
 		if (flag) {
 			// return "debitNote/scanResultSuccess";
 			return scanResultSuccess;
