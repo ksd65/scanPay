@@ -79,7 +79,6 @@
 			async:false,
 			success:function(data) {
 				if(data.returnCode=="0000"){//请求成功
-					
 					if("${userAgentType}"=="alipay"){
 						AlipayJSBridge.call("tradePay",
 								{tradeNO:data.resData.channelNo},

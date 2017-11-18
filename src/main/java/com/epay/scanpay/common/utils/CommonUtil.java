@@ -60,4 +60,36 @@ public class CommonUtil {
 	        }
 	        return sb.toString();
 	    }
+	    
+	    public static void main(String[] args) {
+	    	String token="04faecde-792e-4027-89c9-6910798887b6";
+			String timeStamp=String.valueOf(new Date().getTime() / 1000);
+			String nonceStr=getRandomStringByLength(32);
+			
+			
+			JSONObject reqData=new JSONObject();
+			
+			reqData.put("epayCode", "J000000011");
+			reqData.put("money", "0.1");
+			reqData.put("userId", "oSmj1slOoxkyqquGHsTWDaLqyLOY");
+			reqData.put("remark", "测试");
+
+			reqData.put("appClientType", "micromessenger");
+			
+			Map<String, String> paramMap=new HashMap<String, String>();
+			paramMap.put("token", token);
+			paramMap.put("timeStamp", timeStamp);
+			paramMap.put("nonceStr", nonceStr);
+			paramMap.put("reqData", reqData.toString());
+			String sign=SignatureUtil.createSignature(paramMap);
+			
+			JSONObject result=new JSONObject();
+			result.put("token", token);
+			result.put("timeStamp", timeStamp);
+			result.put("nonceStr", nonceStr);
+			result.put("signature", sign);
+			result.put("reqData", reqData);
+			
+			System.out.println(result.toString());
+		}
 }

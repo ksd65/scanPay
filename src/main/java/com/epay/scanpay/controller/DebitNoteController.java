@@ -133,6 +133,9 @@ public class DebitNoteController {
 				return "redirect:https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + WxConfig.appid
 						+ "&redirect_uri=" + redirectUrl + "&response_type=code&scope=snsapi_base&state=" + state
 						+ "#wechat_redirect";
+			}else{
+				redirectUrl = SysConfig.payService + "/weixinPay/eskOpenId";
+				return "redirect:http://www.tianlepay.com/aggregate/wx/openid.kb?agentId=2017101714241&uri="+redirectUrl;
 			}
 			
 			/*
@@ -196,6 +199,73 @@ public class DebitNoteController {
 		return index;
 
 	}
+	
+	@RequestMapping("/weixinPay/eskOpenId")
+	public String eskOpenId(Model model, HttpServletRequest request) {
+		model.addAttribute("userAgentType", "micromessenger");
+		String oemName = request.getParameter("state");
+		model.addAttribute("oemName", oemName);
+		String register = "";
+		String scanResult = "";
+		String index = "";
+		String state = "";
+		if (oemName == null || oemName == "") {
+			register = "redirect:/register?a=1";
+			scanResult = "debitNote/scanResult";
+			index = "/debitNote/index";
+			state = "";
+		} else {
+			register = "redirect:/register?oemName=" + oemName;
+			scanResult = oemName + "/" + "debitNote/scanResult";
+			index = oemName + "/debitNote/index";
+			state = oemName;
+		}
+		String openid = request.getParameter("openid");
+		if (openid == null || "".equals(openid)) {
+			model.addAttribute("resultMessage", "亲，不好意思，出错啦。");
+			// return "debitNote/scanResult";
+			return scanResult;
+		}
+		request.getSession().setAttribute("openid", openid);// 将openId保存到session
+
+		String epayCode = request.getSession().getAttribute("epayCode").toString();
+		JSONObject reqData = new JSONObject();
+		reqData.put("epayCode", epayCode);
+		JSONObject responseJson = JSONObject.fromObject(
+					HttpUtil.sendPostRequest(SysConfig.pospService + "/api/memberInfo/getMemberInfoByEpayCode",
+							CommonUtil.createSecurityRequstData(reqData)));
+		if ("0000".equals(responseJson.getString("returnCode"))) {
+			String epayCodeStatus = responseJson.getJSONObject("resData").getString("epayCodeStatus");
+			if ("3".equals(epayCodeStatus) || "6".equals(epayCodeStatus)) {
+				// return "redirect:/register?epayCode=" + epayCode;
+				return register + "&epayCode=" + epayCode;
+			}
+			if ("4".equals(epayCodeStatus)) {
+				model.addAttribute("resultMessage", "亲，您的信息还在审核中，暂不能收款，通过之后我们将会短信提醒您。。。。。");
+				// return "debitNote/scanResult";
+				return scanResult;
+			}
+			System.out.println("openid======"+openid);
+			model.addAttribute("memberId", responseJson.getJSONObject("resData").getString("memberId"));
+			model.addAttribute("epayCode", epayCode);
+			model.addAttribute("memberName", responseJson.getJSONObject("resData").getString("memberName"));
+			model.addAttribute("userId", openid);
+		} else {
+			model.addAttribute("resultMessage", responseJson.getString("returnMsg"));
+			// return "debitNote/scanResult";
+			return scanResult;
+		}
+
+		
+
+		// return "/debitNote/index";
+		return index;
+
+	}
+	
+	
+	
+	
 
 	@RequestMapping("/weixinPay/debitNoteAuthCallBack")
 	public String wxDebitNoteAuthCallBack(Model model, HttpServletRequest request) {
@@ -248,7 +318,7 @@ public class DebitNoteController {
 					// return "debitNote/scanResult";
 					return scanResult;
 				}
-
+				System.out.println("openid======"+openid);
 				model.addAttribute("memberId", responseJson.getJSONObject("resData").getString("memberId"));
 				model.addAttribute("epayCode", epayCode);
 				model.addAttribute("memberName", responseJson.getJSONObject("resData").getString("memberName"));
