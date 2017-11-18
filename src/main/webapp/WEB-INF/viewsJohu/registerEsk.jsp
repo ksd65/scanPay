@@ -51,12 +51,15 @@
 				</select>
 			</div>
 		</dl>
-		<!-- 
 		<dl>
 			<span>营业执照</span>
 			<input type="text" name="busLicenceNbr" class="zcimstxt" placeholder="请输入您的营业执照编号" >
 		</dl>
-		 -->
+		<dl>
+			<span>邮箱</span>
+			<input type="text" name="email" class="zcimstxt" placeholder="请输入您的邮箱地址" >
+		</dl>
+		
 		<dl>
 				<span>所在省市</span>
 				<div class="setsa">
@@ -625,7 +628,7 @@ function addr_cityChange(cityVal){
 			return;
 		}
 		
-		/**暂时屏蔽营业执照号码
+		/**暂时屏蔽营业执照号码*/
 		var busLicenceNbr = $.trim($("input[name='busLicenceNbr']").val());
 		if("" == busLicenceNbr){
 			alert("请填写营业执照编号");
@@ -635,8 +638,12 @@ function addr_cityChange(cityVal){
 			alert("营业执照号码不正确");
 			return ;
 		}
-		*/
-
+		
+		var email = $.trim($("input[name='email']").val());
+		if("" == email){
+			alert("请填写邮箱地址");
+			return ;
+		}
 		var merchantName = $.trim($("input[name='merchantName']").val());
 		if("" == merchantName){
 			alert("请填写商户名称");

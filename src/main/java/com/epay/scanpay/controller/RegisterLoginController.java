@@ -137,6 +137,7 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 		String agentType=null;
 		String agentCode=null;
 		String bankArea=null;
+		String email=null;
 		JSONObject result = new JSONObject();
 		JSONObject reqData=new JSONObject();
 		try {
@@ -144,7 +145,8 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 			certNbr = request.getParameter("certNbr").toString();
 			addr = request.getParameter("addr").toString();
 			cardNbr = request.getParameter("cardNbr").toString();
-			//busLicenceNbr = request.getParameter("busLicenceNbr").toString();
+			busLicenceNbr = request.getParameter("busLicenceNbr").toString();
+			email = request.getParameter("email").toString();
 			contactType=request.getParameter("select_c").toString();
 			province = request.getParameter("addr_province").toString();
 			city = request.getParameter("addr_city").toString();
@@ -212,13 +214,17 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 			}
 			
 			//暂时屏蔽营业执照号码
-//			if("".equals(busLicenceNbr)){
-//				throw new ArgException("营业执照号码不能为空");
-//			}
-//			
-//			if(busLicenceNbr.length() != 15 && busLicenceNbr.length() != 18){
-//				throw new ArgException("营业执照号码不正确");
-//			}
+			if("".equals(busLicenceNbr)){
+				throw new ArgException("营业执照号码不能为空");
+			}
+			
+			if(busLicenceNbr.length() != 15 && busLicenceNbr.length() != 18){
+				throw new ArgException("营业执照号码不正确");
+			}
+			
+			if("".equals(email)){
+				throw new ArgException("邮箱地址不能为空");
+			}
 			
 			if("".equals(addr)){
 				throw new ArgException("地址不能为空");
@@ -320,6 +326,8 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 			registerTmp.setPayCode(payCode);
 			registerTmp.setDelFlag("0");
 			registerTmp.setStatus("0");
+			
+			registerTmp.setEmail(email);//增加邮箱地址
 			
 			reqData.put("registerTmp", registerTmp);
 			reqData.put("verifyCode", verifyCode);
