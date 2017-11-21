@@ -110,7 +110,7 @@ function toPay(){
 	            <label for="radioFourInput1"></label>
 	        </div>
 		</dl>
-		<dl>
+	<!-- 	<dl>
 			<img src="${ctx }/johu/images/zfb.png" />
 			<dd>
 				<span>支付宝扫码</span>
@@ -120,7 +120,7 @@ function toPay(){
 	            <input type="radio" id="radioFourInput2" value="2" name="zffs" />
 	            <label for="radioFourInput2"></label>
 	        </div>
-		</dl>
+		</dl> -->
 	</div>
 	<input type="button" class="butyel" value="确认支付" onclick="return toPay()">
 	

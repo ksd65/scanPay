@@ -135,7 +135,7 @@ public class DebitNoteController {
 						+ "#wechat_redirect";
 			}else{
 				redirectUrl = SysConfig.payService + "/weixinPay/eskOpenId";
-				return "redirect:http://www.tianlepay.com/aggregate/wx/openid.kb?agentId=2017101714241&uri="+redirectUrl;
+				return "redirect:http://www.tianlepay.com/aggregate/wx/openid.kb?agentId=2017101714241&uri="+redirectUrl+"&data=123456789";
 			}
 			
 			/*
