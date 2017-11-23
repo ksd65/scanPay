@@ -99,7 +99,34 @@ function toPay(){
 		</dd>
 	</div>
 	<div class="zffsdiv">
-		<dl>
+		<c:forEach items="${payList }" var="paylist">
+			<dl>
+				<c:if test="${paylist.payType=='WX' }">
+					<img src="${ctx }/johu/images/wx.png" />
+					<dd>
+						<span>微信扫码</span>
+						<p>推荐安装微信5.0及以上版本的用户使用</p>
+					</dd>
+					<div class="zffsxz">
+			            <input type="radio" id="radioFourInput1" value="1" name="zffs" checked="checked"/>
+			            <label for="radioFourInput1"></label>
+			        </div>
+				</c:if>
+				<c:if test="${paylist.payType=='ZFB' }">
+					<img src="${ctx }/johu/images/zfb.png" />
+					<dd>
+						<span>支付宝扫码</span>
+						<p>建议使用9.0及以上版本的支付宝</p>
+					</dd>
+					<div class="zffsxz">
+			            <input type="radio" id="radioFourInput2" value="2" name="zffs" />
+			            <label for="radioFourInput2"></label>
+			        </div>
+				</c:if>
+				
+			</dl>
+		</c:forEach>
+	<!-- 	<dl>
 			<img src="${ctx }/johu/images/wx.png" />
 			<dd>
 				<span>微信扫码</span>
@@ -110,7 +137,7 @@ function toPay(){
 	            <label for="radioFourInput1"></label>
 	        </div>
 		</dl>
-	<!-- 	<dl>
+		<dl>
 			<img src="${ctx }/johu/images/zfb.png" />
 			<dd>
 				<span>支付宝扫码</span>

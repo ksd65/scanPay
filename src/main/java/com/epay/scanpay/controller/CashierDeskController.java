@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +53,27 @@ public class CashierDeskController {
 			payMoney = "";
 		}
 		model.addAttribute("payMoney", payMoney);
+		JSONObject reqData = new JSONObject();
+		reqData.put("memberCode", memberCode);
+		reqData.put("tranCode", "001");//扫码支付
+		JSONObject responseJson = JSONObject.fromObject(
+				HttpUtil.sendPostRequest(SysConfig.pospService + "/api/memberInfo/getMemberPayTypeByCode",
+						CommonUtil.createSecurityRequstData(reqData)));
+		JSONObject memberInfoData ;
+		List<HashMap<String, String>> payList = new ArrayList<HashMap<String,String>>();
+		if ("0000".equals(responseJson.getString("returnCode"))) {
+			memberInfoData = responseJson.getJSONObject("resData");
+			String payTypeStr = memberInfoData.getString("payTypeList");
+			if(payTypeStr!=null &&!"".equals(payTypeStr)){
+				String[] arr = payTypeStr.split("#");
+				for(int i=0;i<arr.length;i++){
+					HashMap<String, String> map = new HashMap<String, String>();
+					map.put("payType", arr[i]);
+					payList.add(map);
+				}
+			}
+		}
+		model.addAttribute("payList", payList);
 		if("1".equals(platformType)){
 			return "cashierDesk/indexMobile";
 		}else{
