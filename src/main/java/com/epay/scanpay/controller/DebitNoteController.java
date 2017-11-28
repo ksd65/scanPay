@@ -114,6 +114,8 @@ public class DebitNoteController {
 			return scanResult;
 		}
 		
+		String routeCode = getRouteCode();
+		
 		if (ua.indexOf("micromessenger") > 0) {
 			//若微信商户号还未审核通过，则提示正在审核中
 			if(!memberInfoData.containsKey("wxStatus") || !"1".equals(memberInfoData.get("wxStatus"))){
@@ -129,7 +131,7 @@ public class DebitNoteController {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			if(!"ESK".equals(SysConfig.channel)){
+			if(!"ESK".equals(routeCode)){
 				return "redirect:https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + WxConfig.appid
 						+ "&redirect_uri=" + redirectUrl + "&response_type=code&scope=snsapi_base&state=" + state
 						+ "#wechat_redirect";
@@ -160,7 +162,7 @@ public class DebitNoteController {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			if(!"ESK".equals(SysConfig.channel)){
+			if(!"ESK".equals(routeCode)){
 				return "redirect:https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id="
 					+ AlipayServiceEnvConstants.APP_ID + "&state=" + state + "&scope=auth_base&redirect_uri="
 					+ redirectUrl;
@@ -182,7 +184,7 @@ public class DebitNoteController {
 		model.addAttribute("epayCode", epayCode);
 		model.addAttribute("oemName", oemName);
 		
-		if("ESK".equals(SysConfig.channel)){
+		if("ESK".equals(routeCode)){
 			JSONObject resJson = JSONObject.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService + "/api/debitNote/oneCodePay",
 							CommonUtil.createSecurityRequstData(reqData)));
 			if ("0000".equals(resJson.getString("returnCode"))) {
@@ -914,6 +916,22 @@ public class DebitNoteController {
 		}
 		return "redirect:"+res;
 	 
+	}
+	
+	private String getRouteCode(){
+		String routeCode = SysConfig.channel;
+		try{
+			JSONObject reqData = new JSONObject();
+			reqData.put("configName", "routeCode");
+			JSONObject result = JSONObject.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService + "/api/common/getCommonConfig", CommonUtil.createSecurityRequstData(reqData)));
+			if("0000".equals(result.getString("returnCode"))){
+				routeCode = result.getString("resData");
+			}
+		}catch (Exception e) {
+			logger.error(e.getMessage());
+			e.printStackTrace(); 
+		}
+		return routeCode;
 	}
 
 }

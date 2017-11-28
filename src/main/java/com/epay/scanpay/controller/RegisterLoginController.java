@@ -50,7 +50,8 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 		modelMap.put("epayCode", epayCode);
 		modelMap.put("oemName", oemName);
 		if (oemName==null || oemName==""){
-			if("ESK".equals(SysConfig.channel)){
+			String routeCode = getRouteCode();
+			if("ESK".equals(routeCode)){
 				register="registerEsk";
 			}else{
 				register="register";
@@ -243,8 +244,8 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 			if("".equals(bankId)){
 				throw new ArgException("开户银行不能为空");
 			}
-			
-			if("ESK".equals(SysConfig.channel)){
+			String routeCode = getRouteCode();
+			if("ESK".equals(routeCode)){
 				if(certFilePath==null){
 					throw new ArgException("身份证正面照不能为空");
 				}
@@ -726,5 +727,21 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 			return oemName + "/forget"; 
 		}
 		return "forget";
+	}
+	
+	private String getRouteCode(){
+		String routeCode = SysConfig.channel;
+		try{
+			JSONObject reqData = new JSONObject();
+			reqData.put("configName", "routeCode");
+			JSONObject result = JSONObject.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService + "/api/common/getCommonConfig", CommonUtil.createSecurityRequstData(reqData)));
+			if("0000".equals(result.getString("returnCode"))){
+				routeCode = result.getString("resData");
+			}
+		}catch (Exception e) {
+			logger.error(e.getMessage());
+			e.printStackTrace(); 
+		}
+		return routeCode;
 	}
 }
