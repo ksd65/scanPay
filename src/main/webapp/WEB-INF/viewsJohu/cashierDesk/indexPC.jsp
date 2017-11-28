@@ -95,23 +95,30 @@ function toPay(){
 		<div class="fkstit">
 			<span>支付方式</span>
 		</div>
+		
 		<div class="fkscon">
-			<dd>
-				<div class="radioxx">
-		            <input type="radio" id="radioFourInput" name="zffs" value="2"/>
-		            <label for="radioFourInput"></label>    
-		        </div>
-		        <img src="${ctx }/johu/images/log_zfb.png" />
-		        <span>—— 支付宝扫码支付</span>
-		    </dd>
-		    <dd>
-				<div class="radioxx">
-		            <input type="radio" id="radioFourInput2" name="zffs" value="1"/>
-		            <label for="radioFourInput2"></label>    
-		        </div>
-		        <img src="${ctx }/johu/images/log_wx.png" />
-		        <span>—— 微信扫码支付</span>
-		    </dd>
+			<c:forEach items="${payList }" var="paylist">
+				<c:if test="${paylist.payType=='WX' }">
+					<dd>
+						<div class="radioxx">
+				            <input type="radio" id="radioFourInput2" name="zffs" value="1"/>
+				            <label for="radioFourInput2"></label>    
+				        </div>
+				        <img src="${ctx }/johu/images/log_wx.png" />
+				        <span>—— 微信扫码支付</span>
+				    </dd>
+				</c:if>
+				<c:if test="${paylist.payType=='ZFB' }">
+					<dd>
+						<div class="radioxx">
+				            <input type="radio" id="radioFourInput" name="zffs" value="2"/>
+				            <label for="radioFourInput"></label>    
+				        </div>
+				        <img src="${ctx }/johu/images/log_zfb.png" />
+				        <span>—— 支付宝扫码支付</span>
+				    </dd>
+				</c:if>
+			</c:forEach>
 		</div>
 	</div>
 	<input type="button" value="立即付款" class="fsbut" onclick="return toPay()"/> 
