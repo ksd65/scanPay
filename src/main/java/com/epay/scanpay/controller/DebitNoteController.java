@@ -24,6 +24,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.epay.scanpay.common.constant.AlipayServiceEnvConstants;
+import com.epay.scanpay.common.constant.DataDicConstant;
 import com.epay.scanpay.common.constant.SysConfig;
 import com.epay.scanpay.common.constant.WxConfig;
 import com.epay.scanpay.common.excep.ArgException;
@@ -131,7 +132,7 @@ public class DebitNoteController {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			if(!"ESK".equals(routeCode)){
+			if(!DataDicConstant.ESK_ROUTE_CODE.equals(routeCode)){
 				return "redirect:https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + WxConfig.appid
 						+ "&redirect_uri=" + redirectUrl + "&response_type=code&scope=snsapi_base&state=" + state
 						+ "#wechat_redirect";
@@ -162,7 +163,7 @@ public class DebitNoteController {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			if(!"ESK".equals(routeCode)){
+			if(!DataDicConstant.ESK_ROUTE_CODE.equals(routeCode)){
 				return "redirect:https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id="
 					+ AlipayServiceEnvConstants.APP_ID + "&state=" + state + "&scope=auth_base&redirect_uri="
 					+ redirectUrl;
@@ -184,7 +185,7 @@ public class DebitNoteController {
 		model.addAttribute("epayCode", epayCode);
 		model.addAttribute("oemName", oemName);
 		
-		if("ESK".equals(routeCode)){
+		if(DataDicConstant.ESK_ROUTE_CODE.equals(routeCode)){
 			JSONObject resJson = JSONObject.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService + "/api/debitNote/oneCodePay",
 							CommonUtil.createSecurityRequstData(reqData)));
 			if ("0000".equals(resJson.getString("returnCode"))) {

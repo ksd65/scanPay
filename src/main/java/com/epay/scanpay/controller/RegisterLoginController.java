@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.epay.scanpay.common.constant.DataDicConstant;
 import com.epay.scanpay.common.constant.SysConfig;
 import com.epay.scanpay.common.constant.WxConfig;
 import com.epay.scanpay.common.excep.ArgException;
@@ -51,7 +52,7 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 		modelMap.put("oemName", oemName);
 		if (oemName==null || oemName==""){
 			String routeCode = getRouteCode();
-			if("ESK".equals(routeCode)){
+			if(DataDicConstant.ESK_ROUTE_CODE.equals(routeCode)){
 				register="registerEsk";
 			}else{
 				register="register";
@@ -245,7 +246,7 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 				throw new ArgException("开户银行不能为空");
 			}
 			String routeCode = getRouteCode();
-			if("ESK".equals(routeCode)){
+			if(DataDicConstant.ESK_ROUTE_CODE.equals(routeCode)){
 				if(certFilePath==null){
 					throw new ArgException("身份证正面照不能为空");
 				}
