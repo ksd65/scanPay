@@ -114,10 +114,11 @@ public class DebitNoteController {
 			// return "debitNote/scanResult";
 			return scanResult;
 		}
-		
-		String routeCode = getRouteCode();
-		
+		Integer memberId = memberInfoData.getInt("memberId");
+		String routeCode = "";
 		if (ua.indexOf("micromessenger") > 0) {
+			routeCode = getRouteCode(memberId,DataDicConstant.PAY_METHOD_GZHZF,DataDicConstant.PAY_TYPE_WX);
+			
 			//若微信商户号还未审核通过，则提示正在审核中
 			if(!memberInfoData.containsKey("wxStatus") || !"1".equals(memberInfoData.get("wxStatus"))){
 				return auditPage;
@@ -151,6 +152,8 @@ public class DebitNoteController {
 			 */
 
 		} else if (ua.indexOf("alipay") > 0) {
+			routeCode = getRouteCode(memberId,DataDicConstant.PAY_METHOD_GZHZF,DataDicConstant.PAY_TYPE_ZFB);
+			
 			//若支付宝商户号还未审核通过，则提示正在审核中
 			if(!memberInfoData.containsKey("zfbStatus") || !"1".equals(memberInfoData.get("zfbStatus"))){
 				return auditPage;
@@ -919,12 +922,14 @@ public class DebitNoteController {
 	 
 	}
 	
-	private String getRouteCode(){
+	private String getRouteCode(Integer memberId,String payMethod,String payType){
 		String routeCode = SysConfig.channel;
 		try{
 			JSONObject reqData = new JSONObject();
-			reqData.put("configName", "routeCode");
-			JSONObject result = JSONObject.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService + "/api/common/getCommonConfig", CommonUtil.createSecurityRequstData(reqData)));
+			reqData.put("memberId", memberId);
+			reqData.put("payMethod", payMethod);
+			reqData.put("payType", payType);
+			JSONObject result = JSONObject.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService + "/api/common/getRouteCode", CommonUtil.createSecurityRequstData(reqData)));
 			if("0000".equals(result.getString("returnCode"))){
 				routeCode = result.getString("resData");
 			}

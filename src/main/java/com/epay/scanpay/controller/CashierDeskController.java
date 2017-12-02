@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.epay.scanpay.common.constant.DataDicConstant;
 import com.epay.scanpay.common.constant.SysConfig;
 import com.epay.scanpay.common.utils.CommonUtil;
 import com.epay.scanpay.common.utils.DateUtil;
@@ -52,7 +53,7 @@ public class CashierDeskController {
 		model.addAttribute("payMoney", payMoney);
 		JSONObject reqData = new JSONObject();
 		reqData.put("memberCode", memberCode);
-		reqData.put("tranCode", "001");//扫码支付
+		reqData.put("payMethod", DataDicConstant.PAY_METHOD_SMZF);//扫码支付
 		JSONObject responseJson = JSONObject.fromObject(
 				HttpUtil.sendPostRequest(SysConfig.pospService + "/api/memberInfo/getMemberPayTypeByCode",
 						CommonUtil.createSecurityRequstData(reqData)));

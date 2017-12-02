@@ -108,6 +108,7 @@
  									"paySign" : data.resData.wxjsapiStr.paySign //微信签名
  								},
  								function(res) {
+ 									//alert(res.err_msg);
  									if (res.err_msg == "get_brand_wcpay_request:ok") {
  										location.href = "${ctx}/debitNote/payCallBack?orderCode="
  												+ data.resData.orderCode;
