@@ -56,7 +56,7 @@ function toPay(){
 			if(data.returnCode=="0000"){//请求成功
 				var submitUrl = "${ctx}/cashierDesk/getQrCodeP";
 				var htmlStr = "<form id='scanpaysubmit' action='"+ submitUrl + "' method='post'> " 
-						  + " <input type='hidden' name='qrCodeDetail' value='"+data.resData.qrCode+"'> "
+						  + " <input type='hidden' name='qrCodeDetail' value='"+data.qrCode+"'> "
 						  + " <input type='hidden' name='payTypeDetail' value='"+payType+"'>"
 						  + " <input type='hidden' name='payMoneyDetail' value='"+payMoney+"'></form>";
 						  $("#blankCommonBlock").html(htmlStr);

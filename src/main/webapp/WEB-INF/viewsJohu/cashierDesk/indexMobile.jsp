@@ -57,7 +57,7 @@ function toPay(){
 					//location.href = "${ctx}/cashierDesk/getQrCodeM?qrCode=" + data.resData.qrCode;
 				var submitUrl = "${ctx}/cashierDesk/getQrCodeM";
 				var htmlStr = "<form id='scanpaysubmit' action='"+ submitUrl + "' method='post'> " 
-						  + " <input type='hidden' name='qrCodeDetail' value='"+data.resData.qrCode+"'> "
+						  + " <input type='hidden' name='qrCodeDetail' value='"+data.qrCode+"'> "
 						  + " <input type='hidden' name='payTypeDetail' value='"+payType+"'>"
 						  + " <input type='hidden' name='payMoneyDetail' value='"+payMoney+"'></form>";
 						  $("#blankCommonBlock").html(htmlStr);
