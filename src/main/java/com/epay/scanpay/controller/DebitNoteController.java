@@ -159,18 +159,17 @@ public class DebitNoteController {
 				return auditPage;
 			}
 			model.addAttribute("userAgentType", "alipay");
-			String redirectUrl = "http://" + request.getServerName() + ":" + request.getServerPort()
-					+ request.getContextPath() + "/alipay/debitNoteAuthCallBack";
+			String redirectUrl = SysConfig.payService + "/alipay/debitNoteAuthCallBack";
 			try {
 				redirectUrl = URLEncoder.encode(redirectUrl, "utf-8");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			if(!DataDicConstant.ESK_ROUTE_CODE.equals(routeCode)){
+			//if(!DataDicConstant.ESK_ROUTE_CODE.equals(routeCode)){
 				return "redirect:https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id="
 					+ AlipayServiceEnvConstants.APP_ID + "&state=" + state + "&scope=auth_base&redirect_uri="
 					+ redirectUrl;
-			}
+			//}
 		} else if (ua.indexOf("application=jdjr-app") > 0) {//放在qq前面，因为ua里面有和qq相同的字符串
 			model.addAttribute("memberId", responseJson.getJSONObject("resData").getString("memberId"));
 			model.addAttribute("memberName", responseJson.getJSONObject("resData").getString("memberName"));
@@ -370,7 +369,7 @@ public class DebitNoteController {
 			if (null != oauthTokenResponse && oauthTokenResponse.isSuccess()) {
 				// request.getSession().setAttribute("alipayUserId",
 				// oauthTokenResponse.getUserId());
-
+				System.out.println("userid========"+oauthTokenResponse.getUserId());
 				String epayCode = request.getSession().getAttribute("epayCode").toString();
 				JSONObject reqData = new JSONObject();
 				reqData.put("epayCode", epayCode);
