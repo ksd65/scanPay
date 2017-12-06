@@ -222,7 +222,7 @@ input{margin:0;padding:0;}
 .userxx dd span{font:1.1rem/2.2rem "微软雅黑";color:#fff;}
 .userxx dd p{font:0.8rem/1.2rem "微软雅黑";color:#fff;}
 .usercen .userjy{width:100%;background: #fff;overflow: hidden;padding:0.5rem 0;}
-.userjy dd{float:left;width:50%;}
+.userjy dd{float:left;width:100%;}
 .userjy dd span{width:100%;text-align: center;display: block;font:1rem/1.2rem "微软雅黑";color:#222;}
 .userjy dd p{width:100%;text-align: center;display: block;font:0.8rem/1.2rem "微软雅黑";color:#888;}
 .usercen .usergj{width:100%;overflow: hidden;}

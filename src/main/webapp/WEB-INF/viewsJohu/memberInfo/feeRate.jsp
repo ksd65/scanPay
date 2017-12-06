@@ -30,10 +30,14 @@
 			<span>手续费</span>
 		</div>
 		<div class="shztflcon">
+		<c:if test="${resData.memberInfo.settleType=='0' }">
 			<dl><span>D+0</span><span><fmt:formatNumber type="number" value="${resData.memberInfo.t0TradeRate*100 }" pattern="0.00" maxFractionDigits="2"/>%</span><span>每笔${resData.memberInfo.t0DrawFee }元</span></dl>
+		</c:if>
+		<c:if test="${resData.memberInfo.settleType=='1' }">
 			<dl><span>T+1</span><span><fmt:formatNumber type="number" value="${resData.memberInfo.t1TradeRate*100 }" pattern="0.00" maxFractionDigits="2"/>%</span><span>每笔${resData.memberInfo.t1DrawFee }元</span></dl>
+		</c:if>
 		</div>
-		<h6>银联快捷</h6>
+		<!-- <h6>银联快捷</h6>
 		<div class="shztfltit">
 			<span>积分</span>
 			<span>服务费率</span>
@@ -42,7 +46,7 @@
 		<div class="shztflcon">
 			<dl><span>无积分</span><span><fmt:formatNumber type="number" value="${resData.memberInfo.mlWjfRate*100 }" pattern="0.00" maxFractionDigits="2"/>%</span><span>每笔${resData.memberInfo.mlWjfFee }元</span></dl>
 			<dl><span>有积分</span><span><fmt:formatNumber type="number" value="${resData.memberInfo.mlJfRate*100 }" pattern="0.00" maxFractionDigits="2"/>%</span><span>每笔${resData.memberInfo.mlJfFee }元</span></dl>
-		</div>
+		</div> -->
 	</div>
 </div>
 </body>

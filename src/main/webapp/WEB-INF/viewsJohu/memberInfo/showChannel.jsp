@@ -57,13 +57,13 @@
 					</c:choose>
 				</span>
 				<span>${resData.memberInfo.drawStatus=='1'?'关闭':'启用'}</span>
-				<span>
+				<span>&nbsp;
 				<!--<c:if test="${resData.memberInfo.status=='4' || resData.memberInfo.drawStatus=='1'}">
 					<a href="javascript:void(0);" onclick="toBindCard()">信用卡认证</a>
 				</c:if>--></span>
 			</dl>
 		</div>
-		<div class="shztfltit">
+	<!-- 	<div class="shztfltit">
 			<span>单笔限额</span>
 			<span>单日限额</span>
 			<span>操作</span>
@@ -85,7 +85,7 @@
 				</c:choose>
 			</span>
 			<span><a href="javascript:void(0);" onclick="txcg(1)">我要提额</a></span></dl>
-		</div>
+		</div> -->
 		<div id="txcg" class="txbfkd" style="display:none;">
 			<div class="txbfkdcon">
 				<span>提额认证流程</span>
