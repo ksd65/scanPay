@@ -607,6 +607,12 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 		
 		JSONObject reqData=new JSONObject();
 		reqData.put("memberID", memberID);
+		String ua = request.getHeader("user-agent").toLowerCase();
+		if (ua.indexOf("alipay") > 0) {
+			reqData.put("userAgentType", "alipay");
+		}else if (ua.indexOf("micromessenger") > 0) {
+			reqData.put("userAgentType", "micromessenger");
+		}
 		result=JSONObject.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService+"/api/registerLogin/toLoginOut", CommonUtil.createSecurityRequstData(reqData)));
 		return "login";
 	}
