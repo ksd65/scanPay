@@ -557,11 +557,15 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 			if("".equals(password)){
 				throw new ArgException("密码不能为空");
 			}
-			
+			String ua = request.getHeader("user-agent").toLowerCase();
 			JSONObject reqData=new JSONObject();
 			reqData.put("loginCode", loginCode);
 			reqData.put("password", password);
-			reqData.put("userOpenID", userOpenID);
+			if (ua.indexOf("alipay") > 0) {
+				reqData.put("userAliOpenID", userOpenID);
+			}else{
+				reqData.put("userOpenID", userOpenID);
+			}
 			result=JSONObject.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService+"/api/registerLogin/toLogin", CommonUtil.createSecurityRequstData(reqData)));
 			if("0000".equals(result.getString("returnCode"))){
 				SessionUtils.addMemberInfoSession(request, result.getJSONObject("resData").getJSONObject("memberInfo"));
