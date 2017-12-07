@@ -350,6 +350,7 @@ public class DebitNoteController {
 		model.addAttribute("userAgentType", "alipay");
 
 		String authCode = request.getParameter("auth_code");
+		System.out.println("authCode===="+authCode);
 		String oemName = request.getParameter("state");
 		model.addAttribute("oemName", oemName);
 		String register = "";
@@ -364,7 +365,6 @@ public class DebitNoteController {
 			oauthTokenRequest.setGrantType(AlipayServiceEnvConstants.GRANT_TYPE);
 			AlipayClient alipayClient = AlipayAPIClientFactory.getAlipayClient();
 			AlipaySystemOauthTokenResponse oauthTokenResponse = alipayClient.execute(oauthTokenRequest);
-
 			// 成功获得authToken
 			if (null != oauthTokenResponse && oauthTokenResponse.isSuccess()) {
 				// request.getSession().setAttribute("alipayUserId",

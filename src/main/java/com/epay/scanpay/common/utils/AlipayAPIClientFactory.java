@@ -26,8 +26,9 @@ public class AlipayAPIClientFactory {
      * @return
      */
     public static AlipayClient getAlipayClient(){
-        
+        //2017032306367271
         if(null == alipayClient){
+        	System.out.println("初始化。。。。。。。");
             alipayClient = new DefaultAlipayClient(AlipayServiceEnvConstants.ALIPAY_GATEWAY, AlipayServiceEnvConstants.APP_ID, 
                 AlipayServiceEnvConstants.PRIVATE_KEY, "json", AlipayServiceEnvConstants.CHARSET,AlipayServiceEnvConstants.ALIPAY_PUBLIC_KEY);
         }
