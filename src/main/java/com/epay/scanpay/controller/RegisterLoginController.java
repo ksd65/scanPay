@@ -608,13 +608,16 @@ private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class
 		JSONObject reqData=new JSONObject();
 		reqData.put("memberID", memberID);
 		String ua = request.getHeader("user-agent").toLowerCase();
+		String url = "login";
 		if (ua.indexOf("alipay") > 0) {
 			reqData.put("userAgentType", "alipay");
+			url = "redirect:"+SysConfig.payService+ "/ali/menuRedirect?refer=aHR0cDovL3d3dy5qb2h1dGVjaC5jb20vam9odVBheS9tZW1iZXJJbmZvL21lbWJlckNlbnRlcg==";
 		}else if (ua.indexOf("micromessenger") > 0) {
 			reqData.put("userAgentType", "micromessenger");
+			url = "redirect:"+SysConfig.payService + "/weixin/menuRedirect?refer=aHR0cDovL3d3dy5qb2h1dGVjaC5jb20vam9odVBheS9tZW1iZXJJbmZvL21lbWJlckNlbnRlcg==";
 		}
 		result=JSONObject.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService+"/api/registerLogin/toLoginOut", CommonUtil.createSecurityRequstData(reqData)));
-		return "login";
+		return url;
 	}
 	@RequestMapping("/registerqq")
 	public String registerqq(Model model, HttpServletRequest request) {
