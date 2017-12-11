@@ -12,9 +12,13 @@ public class DataDicConstant {
 	
 	public static String SD_ROUTE_CODE = "1005";//杉德
 	
+	public static String SLF_ROUTE_CODE = "1006";//随乐付
+	
 	public static String PAY_METHOD_SMZF = "001";//扫码支付
 	
 	public static String PAY_METHOD_GZHZF = "003";//公众号H5支付
+	
+	public static String PAY_METHOD_YL = "005";//银联支付
 	
 	public static String PAY_TYPE_WX = "WX";//微信支付
 	
