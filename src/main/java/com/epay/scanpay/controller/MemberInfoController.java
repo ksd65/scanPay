@@ -316,6 +316,30 @@ public class MemberInfoController {
 		
 		return result.toString();
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping("/memberInfo/drawCommit")
+	public String drawCommit(Model model, HttpServletRequest request,HttpServletResponse response) {
+		MemberInfo memberInfo = SessionUtils.getMemberInfoSession(request);
+		if(memberInfo==null){
+			return "login";
+		}
+		String drawMoney = request.getParameter("drawMoney");
+		JSONObject result = new JSONObject();
+		JSONObject reqData=new JSONObject();
+		reqData.put("memberId", memberInfo.getId());
+		reqData.put("drawMoney", drawMoney);
+		result=JSONObject.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService+"/api/memberInfo/drawCommit", CommonUtil.createSecurityRequstData(reqData)));
+//		result.put("returnCode", "0000");
+		
+		return result.toString();
+	}
+	
+	
+	
+	
+	
 	@ResponseBody
 	@RequestMapping("/memberInfo/drawList")
 	public ModelAndView drawList(Model model, HttpServletRequest request,HttpServletResponse response) {

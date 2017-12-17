@@ -395,6 +395,11 @@ input{margin:0;padding:0;}
 .xzkdiv .sbut{display:block;width:90%;height:2.2rem;margin:2rem auto 1.5rem;border:none;border-radius:0.3rem;background:#46aaf0;font:1rem/2.2rem "微软雅黑";color:#fff;}
 
 
+.jydivtop .jybz1 {width: 84%;background: #eee;padding: 0.5rem 8%;overflow: hidden;}
+.jybz1 span {float: left;width: 20%;font-size: 0.8rem;line-height: 2.5rem;color: #3d4442;}
+.jybz1 .bzxx1 {float: left;line-height: 1.3rem;width: 72%;background: #f8f8f8;border: 1px solid #ddd;padding: 0.5rem 3%;color: #3d4442;font-size: 0.8rem;}
+
+
 /**
  *
  * 下拉样式 Pull down styles

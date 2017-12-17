@@ -196,13 +196,17 @@ function locadMoreData(pageIndex,pageSize,pageType,oparateType){
 	        <a href="${ctx }/memberInfo/drawDetail?drawId=${draw.id}">
 				<dl><span>￥
 					<c:if test="${draw.respType=='S' }">${draw.drawamount }</c:if>
-					<c:if test="${draw.respType=='E' }">0</c:if>
-					<c:if test="${draw.respType=='R' }">0</c:if>
+					<c:if test="${draw.respType=='E' }">${draw.money }</c:if>
+					<c:if test="${draw.respType=='R' }">${draw.money }</c:if>
+					<c:if test="${draw.auditStatus=='1' }">${draw.money }</c:if>
+					<c:if test="${draw.auditStatus=='3' }">${draw.money }</c:if>
 				元</span>
 				<span class="blue">
 					<c:if test="${draw.respType=='S' }">提现成功</c:if>
 					<c:if test="${draw.respType=='E' }">提现失败</c:if>
-					<c:if test="${draw.respType=='R' }">提现失败</c:if>
+					<c:if test="${draw.respType=='R' }">提现中</c:if>
+					<c:if test="${draw.auditStatus=='1' }">待审核</c:if>
+					<c:if test="${draw.auditStatus=='3' }">审核不通过</c:if>
 				</span>
 				<span class="smo">${fn:replace(draw.createDate," ","<br/>") }</span></dl>
             </a>

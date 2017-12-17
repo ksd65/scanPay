@@ -28,13 +28,30 @@
 			<span class="grxxsp">${resData.routewayDraw.createDate }</span>
 		</dl>
 		<dl>
+			<span>提现金额</span>
+			<span class="grxxsp">${resData.routewayDraw.money }</span>
+		</dl>
+		<dl>
+			<span>审核状态</span>
+			<span class="grxxsp blue">
+				<c:if test="${resData.routewayDraw.auditStatus=='1' }">待审核</c:if>
+				<c:if test="${resData.routewayDraw.auditStatus=='2' }">审核通过</c:if>
+				<c:if test="${resData.routewayDraw.auditStatus=='3' }">审核不通过</c:if>
+			</span>
+		</dl>
+		<dl>
 			<span>提现状态</span>
 			<span class="grxxsp blue">
 				<c:if test="${resData.routewayDraw.respType=='S' }">提现成功</c:if>
 				<c:if test="${resData.routewayDraw.respType=='E' }">提现失败</c:if>
+				<c:if test="${resData.routewayDraw.respType=='R' }">提现中</c:if>
 			</span>
 		</dl>
-		<c:if test="${resData.routewayDraw.respType=='S' }">
+		<dl>
+			<span>结果说明</span>
+			<span class="grxxsp">${resData.routewayDraw.respMsg }</span>
+		</dl>
+		<!--<c:if test="${resData.routewayDraw.respType=='S' }">
 			<dl>
 				<span>实际提现金额</span>
 				<span class="grxxsp red">${resData.routewayDraw.drawamount }元</span>
@@ -53,7 +70,7 @@
 				<span>交易金额</span>
 				<span class="grxxsp red">${resData.routewayDraw.money }元</span>
 			</dl>
-		</c:if>
+		</c:if>-->
 		<dl>
 			<span>备注</span>
 			<span class="grxxsp">${resData.routewayDraw.remarks }</span>

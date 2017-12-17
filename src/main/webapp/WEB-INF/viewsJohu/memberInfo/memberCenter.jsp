@@ -39,14 +39,14 @@
 				<img src="${ctx }/johu/images/sh01.png" />
 				<span>交易明细</span>
 			</a></li>
-		<!-- 	<li><a href="${ctx }/memberInfo/drawList">
+		 	<li><a href="${ctx }/memberInfo/drawList">
 				<img src="${ctx }/johu/images/sh02.png" />
 				<span>提现明细</span>
 			</a></li>
 			<li><a href="${ctx }/memberInfo/draw">
 				<img src="${ctx }/johu/images/sh06.png" />
 				<span>我要提现</span>
-			</a></li> -->
+			</a></li> 
 			<%--<li><a href="${ctx }/feeRate/index">
 				<img src="${ctx }/johu/images/sh05.png" />
 				<span>我的费率</span>

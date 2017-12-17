@@ -14,17 +14,33 @@
 function toDraw(){
 	//$("#submitBtn").css("background","gray");
 	//$("#submitBtn").attr("disabled",true);
+	if($.trim($("#jytext").val()) == "") {
+      alert("请输入金额!");
+      return false;
+    }
+	
+	var payMoney=$.trim($("#jytext").val());
+	
+	if(payMoney=="0"){
+		alert("请输入正确的金额!");
+	      return false;
+	}
+	var exp = /^([1-9][\d]{0,7}|0)(\.(([0-9]?[1-9])|([1-9][0-9]?)))?$/;
+	if(exp.test(payMoney)==false){
+	  	alert("请输入正确的金额!");
+		return false;
+	}
 	$.ajax({
-		url:"${ctx }/memberInfo/checkToDraw",
-		data:{},
+		url:"${ctx }/memberInfo/drawCommit",
+		data:{drawMoney:payMoney},
 		type:'post',
 		cache:false,
 		async:false,
 		dataType:'json',
 		success:function(data) {
 			if(data.returnCode=="0000"){//请求成功
-				//$('#msgTrue').show();
-				window.location.href = "${ctx }/memberInfo/toDraw";
+				$('#msgTrue').show();
+			//	window.location.href = "${ctx }/memberInfo/toDraw";
 			}else{
 				//$('#msgFalse').show();
 				//$("#submitBtn").attr("disabled",false);
@@ -54,10 +70,20 @@ function hideMsg(num){
 	</div>
 	<div class="txbcon">
 		<div class="txbctop">
-			<dd><span>当日交易金额</span><b class="black">￥${resData.tradeMoneyCountToday}</b></dd>
+			<!-- <dd><span>当日交易金额</span><b class="black">￥${resData.tradeMoneyCountToday}</b></dd>
 			<dd><span>当日已提现金额</span><b class="blue">￥${resData.drawMoneyCount}</b></dd>
 			<dd><span>当日未提现金额</span><b class="red">￥${resData.unDrawMoneyCount}</b></dd>
+			 -->
+			<dd><span>交易金额</span><b class="black">￥${resData.tradeMoneyCountAll}</b></dd>
+			<dd><span>已提现金额</span><b class="blue">￥${resData.drawMoneyCountAll}</b></dd>
+			<dd><span>可提现金额</span><b class="red">￥${resData.canDrawMoneyCount}</b></dd>
+			
+			<div class="jybz">
+				<span>提现金额</span>
+				<input type="text" class="bzxx" id="jytext"/>
+			</div>
 		</div>
+		
 	</div>
 	<%--<input id="submitBtn" type="button" onClick="toDraw()" class="butblue" value="提 现">
 --%>
@@ -69,8 +95,8 @@ function hideMsg(num){
 <div id="msgTrue" class="txbfkd" style="display:none;">
 	<div class="txbfkdcon">
 		<img src="${ctx }/johu/images/cgi.png" />
-		<span>提现申请成功</span>
-		<p>款项到账可能需要几分钟时间<br/>请留意您的银行账户</p>
+		<span>提现申请提交成功</span>
+		<p>后台审核需要一两个工作日<br/>请留意您的银行账户</p>
 		<a class="cgx" href="javascript:;" onClick="hideMsg(1)"></a>
 	</div>
 </div>
