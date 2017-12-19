@@ -131,8 +131,24 @@ function locadMoreData(pageIndex,pageSize,pageType,oparateType){
 				var html = "";
 				for(var i=0;i<draws.length;i++){
 					var draw = draws[i];
-					html = html + "<li><a href='#'><dl><span>￥"+(draw.respType=='S'?draw.drawamount:0) +"元</span><span class='blue'>"+(draw.respType=='S'?"提现成功":"提现失败") +"</span>"
-							+ "<span class='smo'>"+draw.createDate.replace(' ','<br/>') +"</span></dl></a></li>";
+					html = html + "<li><a href='${ctx }/memberInfo/drawDetail?drawId="+draw.id+"'><dl><span>￥"+draw.money+"元</span>";
+							
+					if(draw.respType=='S'){
+						html = html + "<span class=\"blue\">提现成功</span>";
+					}
+					if(draw.respType=='E'){
+						html = html + "<span class=\"red\">提现失败</span>";
+					}
+					if(draw.respType=='R'){
+						html = html + "<span class=\"blue\">提现中</span>";
+					}
+					if(draw.auditStatus=='1'){
+						html = html + "<span class=\"blue\">待审核</span>";
+					}
+					if(draw.auditStatus=='3'){
+						html = html + "<span class=\"red\">审核不通过</span>";
+					}
+					html = html +"<span class='smo'>"+draw.createDate.replace(' ','<br/>') +"</span></dl></a></li>";
 				}
 				if(oparateType == 1){
 					$("#thelist").html(html);
@@ -196,7 +212,7 @@ function locadMoreData(pageIndex,pageSize,pageType,oparateType){
 	        <li>
 	        	<a href="${ctx }/memberInfo/drawDetail?drawId=${draw.id}">
 				<dl>
-					<span>￥<c:if test="${draw.respType=='S' }">${draw.drawamount }</c:if>
+					<span>￥<c:if test="${draw.respType=='S' }">${draw.money }</c:if>
 					<c:if test="${draw.respType=='E' }">${draw.money }</c:if>
 					<c:if test="${draw.respType=='R' }">${draw.money }</c:if>
 					<c:if test="${draw.auditStatus=='1' }">${draw.money }</c:if>

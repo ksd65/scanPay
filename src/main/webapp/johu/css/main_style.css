@@ -39,7 +39,7 @@ input{margin:0;padding:0;}
 .zcimsdiv .zcimsts{display:block;margin:0.5rem auto 0;overflow:hidden;width:90%;height:2.2rem;font:0.6rem/2.2rem "微软雅黑";color:#f15a4a;text-align: center;}
 .zcimsdiv .zcimscon{width:100%;background:#fff;border-top:1px solid #ddd;overflow:hidden;margin:0.5rem 0 0;}
 .zcimscon dl{width:90%;margin:0 auto;padding:0 5%;overflow:hidden;display:block;height:2.6rem;border-bottom:1px solid #ddd;}
-.zcimscon dl span{float:left;width:20%;height:2.6rem;font:0.8rem/2.6rem "微软雅黑";color:#888;}
+.zcimscon dl span{float:left;width:25%;height:2.6rem;font:0.8rem/2.6rem "微软雅黑";color:#888;}
 .zcimscon dl .zcimstxt{float:left;margin:0.5rem 0 0;border:none;height:1.6rem;width:80%;font:0.8rem/1.6rem "微软雅黑";color:#555;}
 .zcimscon dl .yzmtxt{float:left;margin:0.5rem 0 0;border:none;height:1.6rem;width:40%;font:0.8rem/1.6rem "微软雅黑";color:#555;}
 .zcimscon dl em{float:left;display:block;width:1px;height:1.7rem;background:#ddd;margin:0.3rem 0 0 1rem;}
@@ -71,7 +71,7 @@ input{margin:0;padding:0;}
 .zcimscon .imgnum .img2{display:none;width:100%;height:6.6rem;}
 .zcimscon #img .close{display:none;width:10%;text-align: right;color:#f15a4a;}
 
-.zcimsdiv .grxxsp{width:80%;text-align: right;color:#555;}
+.zcimsdiv .grxxsp{width:75%;text-align: right;color:#555;}
 .zcimsdiv .xgxxa{display:block;width:90%;height:2.2rem;margin:2rem auto 1.5rem;border:none;border-radius:0.3rem;background:#f15a4a;font:1rem/2.2rem "微软雅黑";color:#fff;text-align: center;}
 
 .zcokdiv{display:block;overflow:hidden;}
@@ -133,14 +133,18 @@ input{margin:0;padding:0;}
 .jymxtop span.right{float:right;margin:0 1rem 0 0;}
 .jymxdiv .acmr{width:100%;overflow:hidden;border-top:1px solid #ddd;} 
 .acmr li{width:100%;background:#fff;border-bottom:1px solid #ddd;overflow:hidden;}
-.acmr li a{display:block;padding:0.3rem 0;}
+.acmr li a{display:block;padding:0.3rem 0;overflow: hidden;}
 .acmr li a:active{background: #eee;}
 .acmr li dl{overflow:hidden;float:left;margin:0 0 0 6.5%;}
-.acmr li dl.dl1 {width: 46%;}
-.acmr li i {float: left;width: 50%;font-size: 1rem;font-style: normal;line-height: 3rem;}
-.acmr li span {float: left;width: 100%;text-align: right;color: #3d4442;font-size: 0.8rem;line-height: 1.5rem;display: block;overflow: hidden;height: 1.5rem;}
-.acmr li span.smo {font-size: 0.6rem;color: #aaa;line-height: 1.5rem;text-align: right;}
+.acmr li dl.dl1{width:46%;}
+.acmr li dl.dl2{width:34%;}
+.acmr li i{float:left;width:50%;font-size:1rem;font-style: normal;line-height: 3rem;}
+.acmr li span{float:left;width:100%;text-align: right;color:#3d4442;font-size: 0.8rem;line-height: 1.5rem;display:block;overflow: hidden;height:1.5rem;}
+.acmr li span.smo{font-size: 0.6rem;color:#aaa;line-height: 1.5rem;text-align: right;}
 
+.txmxb .acmr li dl{overflow:hidden;width:90%;margin:0 auto;float:none;}
+.txmxb .acmr li span{font:0.8rem/2rem "微软雅黑";color:#555;float:left;width:30%;height:auto;}
+.txmxb .acmr li span.smo{font-size: 0.6rem;color:#aaa;width:40%;line-height: 1rem;text-align: right;}
 .datanull{display:block;position:fixed;overflow:hidden;top:10rem;}
 .datanull img{width:50%;margin:0 auto;display:block;}
 .datanull span{display:block;text-align: center;font:0.8rem/2rem "微软雅黑";color:#aaa;}

@@ -23,7 +23,7 @@
 		<span>我的费率</span>
 	</div>
 	<div class="shztfl">
-		<h6>扫码收款</h6>
+	<!-- 	<h6>扫码收款</h6> -->
 		<div class="shztfltit">
 			<span>结算周期</span>
 			<span>服务费率</span>

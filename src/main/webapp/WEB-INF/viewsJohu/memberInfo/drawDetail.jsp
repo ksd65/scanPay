@@ -28,8 +28,16 @@
 			<span class="grxxsp">${resData.routewayDraw.createDate }</span>
 		</dl>
 		<dl>
-			<span>提现金额</span>
-			<span class="grxxsp">${resData.routewayDraw.money }</span>
+			<span>交易金额</span>
+			<span class="grxxsp red">${resData.routewayDraw.money }元</span>
+		</dl>
+		<dl>
+			<span>实际提现金额</span>
+			<span class="grxxsp red">${resData.routewayDraw.drawamount }元</span>
+		</dl>
+		<dl>
+			<span>提现手续费</span>
+			<span class="grxxsp red">${resData.routewayDraw.drawfee }元</span>
 		</dl>
 		<dl>
 			<span>审核状态</span>

@@ -30,28 +30,33 @@ function toDraw(){
 	  	alert("请输入正确的金额!");
 		return false;
 	}
-	$.ajax({
-		url:"${ctx }/memberInfo/drawCommit",
-		data:{drawMoney:payMoney},
-		type:'post',
-		cache:false,
-		async:false,
-		dataType:'json',
-		success:function(data) {
-			if(data.returnCode=="0000"){//请求成功
-				$('#msgTrue').show();
-			//	window.location.href = "${ctx }/memberInfo/toDraw";
-			}else{
-				//$('#msgFalse').show();
-				//$("#submitBtn").attr("disabled",false);
-		        //$("#submitBtn").css("background","#46aaf0");
-				alert(data.returnMsg);
-			}
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {    
-	        alert("请求出错");
-	    }
-	});
+	var drawFee = $("#drawFee").val();
+	var flag = window.confirm("提现手续费为"+drawFee+"元，您确定要提现吗？");
+	if(flag){
+		$.ajax({
+			url:"${ctx }/memberInfo/drawCommit",
+			data:{drawMoney:payMoney},
+			type:'post',
+			cache:false,
+			async:false,
+			dataType:'json',
+			success:function(data) {
+				if(data.returnCode=="0000"){//请求成功
+					$('#msgTrue').show();
+				//	window.location.href = "${ctx }/memberInfo/toDraw";
+				}else{
+					//$('#msgFalse').show();
+					//$("#submitBtn").attr("disabled",false);
+			        //$("#submitBtn").css("background","#46aaf0");
+					alert(data.returnMsg);
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {    
+		        alert("请求出错");
+		    }
+		});
+	}
+	
 }
 function hideMsg(num){
 	if(num==1){
@@ -70,11 +75,12 @@ function hideMsg(num){
 	</div>
 	<div class="txbcon">
 		<div class="txbctop">
+			<input type="hidden" id="drawFee" value="${resData.drawFee }">
 			<!-- <dd><span>当日交易金额</span><b class="black">￥${resData.tradeMoneyCountToday}</b></dd>
 			<dd><span>当日已提现金额</span><b class="blue">￥${resData.drawMoneyCount}</b></dd>
 			<dd><span>当日未提现金额</span><b class="red">￥${resData.unDrawMoneyCount}</b></dd>
 			 -->
-			<dd><span>交易金额</span><b class="black">￥${resData.tradeMoneyCountAll}</b></dd>
+			<dd><span>账户余额</span><b class="black">￥${resData.balance}</b></dd>
 			<dd><span>已提现金额</span><b class="blue">￥${resData.drawMoneyCountAll}</b></dd>
 			<dd><span>可提现金额</span><b class="red">￥${resData.canDrawMoneyCount}</b></dd>
 			
