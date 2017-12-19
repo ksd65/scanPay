@@ -246,9 +246,12 @@ function locadMoreData(pageIndex,pageSize,pageType,oparateType){
 </div>
 
 <div  id="pageCount" class="jymxtop">
-    <span class="left">提现笔数：<span class="numCount">${resData.drawCnt }</span>笔</span>
-    <span class="right">提现总额：<span class="moneyCount">${resData.moneyCount }</span>元</span>
+    <span class="left">提现笔数&nbsp;&nbsp;&nbsp;&nbsp;：<span class="numCount">${resData.drawCnt }</span>笔</span>
+    <span class="right">提现总额&nbsp;&nbsp;&nbsp;&nbsp;：<span class="moneyCount">${resData.moneyCount }</span>元</span>
+    <span class="left">提现成功笔数：<span class="numCount">${resData.drawSuccessCnt }</span>笔</span>
+    <span class="right">提现成功总额：<span class="moneyCount">${resData.moneySuccessCount }</span>元</span>
+    <span class="left">提现失败笔数：<span class="numCount">${resData.drawFailCnt }</span>笔</span>
+    <span class="right">提现失败总额：<span class="moneyCount">${resData.moneyFailCount }</span>元</span>
 </div>
-
 </body>
 </html>

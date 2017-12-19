@@ -81,7 +81,7 @@ function hideMsg(num){
 			<dd><span>当日未提现金额</span><b class="red">￥${resData.unDrawMoneyCount}</b></dd>
 			 -->
 			<dd><span>账户余额</span><b class="black">￥${resData.balance}</b></dd>
-			<dd><span>已提现金额</span><b class="blue">￥${resData.drawMoneyCountAll}</b></dd>
+		<!-- 	<dd><span>已提现金额</span><b class="blue">￥${resData.drawMoneyCountAll}</b></dd> -->
 			<dd><span>可提现金额</span><b class="red">￥${resData.canDrawMoneyCount}</b></dd>
 			
 			<div class="jybz">
