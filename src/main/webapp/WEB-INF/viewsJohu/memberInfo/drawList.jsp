@@ -244,7 +244,7 @@ function locadMoreData(pageIndex,pageSize,pageType,oparateType){
 	<img src="${ctx }/johu/images/datanull.png" />
 	<span>暂无数据</span>
 </div>
-
+<c:if test="${fn:length(resData.draws)>0 }">
 <div  id="pageCount" class="jymxtop">
     <span class="left">提现笔数&nbsp;&nbsp;&nbsp;&nbsp;：<span class="numCount">${resData.drawCnt }</span>笔</span>
     <span class="right">提现总额&nbsp;&nbsp;&nbsp;&nbsp;：<span class="moneyCount">${resData.moneyCount }</span>元</span>
@@ -253,5 +253,6 @@ function locadMoreData(pageIndex,pageSize,pageType,oparateType){
     <span class="left">提现失败笔数：<span class="numCount">${resData.drawFailCnt }</span>笔</span>
     <span class="right">提现失败总额：<span class="moneyCount">${resData.moneyFailCount }</span>元</span>
 </div>
+</c:if>
 </body>
 </html>

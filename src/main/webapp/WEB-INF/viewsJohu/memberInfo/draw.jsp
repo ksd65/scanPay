@@ -73,28 +73,41 @@ function hideMsg(num){
 	<div class="txbtit">
 		<span>${resData.memberInfo.name}</span>
 	</div>
-	<div class="txbcon">
-		<div class="txbctop">
-			<input type="hidden" id="drawFee" value="${resData.drawFee }">
-			<!-- <dd><span>当日交易金额</span><b class="black">￥${resData.tradeMoneyCountToday}</b></dd>
-			<dd><span>当日已提现金额</span><b class="blue">￥${resData.drawMoneyCount}</b></dd>
-			<dd><span>当日未提现金额</span><b class="red">￥${resData.unDrawMoneyCount}</b></dd>
-			 -->
-			<dd><span>账户余额</span><b class="black">￥${resData.balance}</b></dd>
-		<!-- 	<dd><span>已提现金额</span><b class="blue">￥${resData.drawMoneyCountAll}</b></dd> -->
-			<dd><span>可提现金额</span><b class="red">￥${resData.canDrawMoneyCount}</b></dd>
-			
-			<div class="jybz">
-				<span>提现金额</span>
-				<input type="text" class="bzxx" id="jytext"/>
+	<c:choose>
+		<c:when test="${returnCode=='0000' }">
+			<div class="txbcon">
+				<div class="txbctop">
+					<input type="hidden" id="drawFee" value="${resData.drawFee }">
+					<!-- <dd><span>当日交易金额</span><b class="black">￥${resData.tradeMoneyCountToday}</b></dd>
+					<dd><span>当日已提现金额</span><b class="blue">￥${resData.drawMoneyCount}</b></dd>
+					<dd><span>当日未提现金额</span><b class="red">￥${resData.unDrawMoneyCount}</b></dd>
+					 -->
+					<dd><span>账户余额</span><b class="black">￥${resData.balance}</b></dd>
+				<!-- 	<dd><span>已提现金额</span><b class="blue">￥${resData.drawMoneyCountAll}</b></dd> -->
+					<dd><span>可提现金额</span><b class="red">￥${resData.canDrawMoneyCount}</b></dd>
+					
+					<div class="jybz">
+						<span>提现金额</span>
+						<input type="text" class="bzxx" id="jytext"/>
+					</div>
+				</div>
+				
 			</div>
-		</div>
-		
-	</div>
-	<%--<input id="submitBtn" type="button" onClick="toDraw()" class="butblue" value="提 现">
---%>
-	<a class="butblue"  href="javascript:void(0);" onclick="toDraw()" >提 现</a>
-	</div>
+			<a class="butblue"  href="javascript:void(0);" onclick="toDraw()" >提 现</a>
+		</c:when>
+		<c:otherwise>
+			<div class="txbcon">
+				<div class="txbctop">
+					<dd><b class="red">您没有提现权限</b></dd>
+					
+					
+				</div>
+				
+			</div>
+		</c:otherwise>
+	</c:choose>
+	
+</div>
 
 
 <!--成功提示-->
