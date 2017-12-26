@@ -105,7 +105,34 @@ public class H5PayController {
 			String payMoney = request.getParameter("payMoney");
 			String sceneInfo = request.getParameter("sceneInfo");
 			String ip = request.getParameter("ip");
-			
+			if(memberCode==null || "".equals(memberCode)){
+				model.addAttribute("errorMsg", "商户号memberCode为空");
+				return page;
+			}
+			if(callbackUrl==null || "".equals(callbackUrl)){
+				model.addAttribute("errorMsg", "回调地址callbackUrl为空");
+				return page;
+			}
+			if(orderNum==null || "".equals(orderNum)){
+				model.addAttribute("errorMsg", "商户订单号orderNum为空");
+				return page;
+			}
+			if(payMoney==null || "".equals(payMoney)){
+				model.addAttribute("errorMsg", "支付金额payMoney为空");
+				return page;
+			}
+			if(sceneInfo==null || "".equals(sceneInfo)){
+				model.addAttribute("errorMsg", "场景信息sceneInfo为空");
+				return page;
+			}
+			if(ip==null || "".equals(ip)){
+				model.addAttribute("errorMsg", "ip为空");
+				return page;
+			}
+			if(signStr==null || "".equals(signStr)){
+				model.addAttribute("errorMsg", "签名signStr为空");
+				return page;
+			}
 			JSONObject reqData = new JSONObject();
 			reqData.put("memberCode", memberCode);
 			reqData.put("orderNum", orderNum);
@@ -137,6 +164,12 @@ public class H5PayController {
 		
 	}
 	
+	@RequestMapping("/payment/h5Result")
+	public String h5Result(Model model,HttpServletRequest request){
+		
+		return "payment/h5Result";
+		
+	}
 	
 
 }
