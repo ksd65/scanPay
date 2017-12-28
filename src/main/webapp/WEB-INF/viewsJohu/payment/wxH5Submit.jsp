@@ -1,20 +1,27 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<%
+response.setHeader("Pragma","No-cache"); 
+response.setHeader("Cache-Control","no-cache"); 
+response.setDateHeader("Expires", 0);  
+%>
 <html>
 <head>
-    <title>H5支付跳转</title>
-    <script src="${ctx }/js/jquery-2.2.3.min.js"></script>
+    <meta http-equiv="pragma" content="no-cache"> 
+    <meta http-equiv="cache-control" content="no-cache"> 
+    <meta http-equiv="expires" content="0">  
+    <title>H5支付跳转</title> 
+    
 </head>
 <body>
 
-<form id="form" action="${payUrl}" method="post">
-</form>
+
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        $("#form").submit();
-    });
+	var url = '${payUrl}';
+	window.location.href = url;
+    
 </script>
 
 </body>
