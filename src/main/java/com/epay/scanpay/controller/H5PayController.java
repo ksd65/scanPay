@@ -37,8 +37,14 @@ public class H5PayController {
 	public String index(Model model,HttpServletRequest request){
 		String orderNum = "H"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 		String ip = "";
+		String page = "";
 		try {
 			ip = IpUtils.getIpAddress(request);
+			String type = request.getParameter("type");
+			if(type== null ||"".equals(type)){
+				type = "";
+			}
+			page = "payment/wxH5Pay"+type;
 			System.out.println("ip===="+ip);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -47,7 +53,7 @@ public class H5PayController {
 		model.addAttribute("orderNum", orderNum);
 		model.addAttribute("ip", ip);
 		
-		return "payment/wxH5Pay";
+		return page;
 		
 	}
 	
@@ -202,6 +208,7 @@ public class H5PayController {
 		return page;
 		
 	}
+	
 	
 	@RequestMapping("/payment/h5Result")
 	public String h5Result(Model model,HttpServletRequest request){
