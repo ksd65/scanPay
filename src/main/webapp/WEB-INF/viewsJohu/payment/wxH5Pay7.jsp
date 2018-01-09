@@ -129,7 +129,7 @@
 
 
 
-<form id="form" action="${ctx }/payment/wxH5Confirm" method="post">
+<form id="form" action="${ctx }/payment/h5Confirm" method="post">
 	<input type="hidden" id="memberCode" name="memberCode" value="9010001063">
 	<input type="hidden" id="orderNum" name="orderNum" value="${orderNum }">
 	<input type="hidden" id="payMoney" name="payMoney" value="">

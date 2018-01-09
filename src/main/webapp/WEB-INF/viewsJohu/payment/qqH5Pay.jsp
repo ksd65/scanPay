@@ -80,7 +80,7 @@
 <div id="container">
 
 	<div class="jydivtop">
-		<h1>天悦网络1(84292275)</h1>
+		<h1>QQ钱包H5支付</h1>
 		<div class="xsqdiv">
 			<span>￥</span>
 			<input type="text" id="jytext" class="jytext" name="result" disabled="disabled" placeholder="0">
@@ -130,7 +130,8 @@
 
 
 <form id="form" action="${ctx }/payment/h5Confirm" method="post">
-	<input type="hidden" id="memberCode" name="memberCode" value="9010001058">
+	<input type="hidden" id="payType" name="payType" value="3">
+	<input type="hidden" id="memberCode" name="memberCode" value="9010000988">
 	<input type="hidden" id="orderNum" name="orderNum" value="${orderNum }">
 	<input type="hidden" id="payMoney" name="payMoney" value="">
 	<input type="hidden" id="sceneInfo" name="sceneInfo" value="测试">
