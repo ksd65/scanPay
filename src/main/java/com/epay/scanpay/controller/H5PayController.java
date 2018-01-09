@@ -57,9 +57,33 @@ public class H5PayController {
 		
 	}
 	
+	@RequestMapping("/payment/h5indexqq")
+	public String indexQq(Model model,HttpServletRequest request){
+		String orderNum = "H"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+		String ip = "";
+		String page = "";
+		try {
+			ip = IpUtils.getIpAddress(request);
+			String type = request.getParameter("type");
+			if(type== null ||"".equals(type)){
+				type = "";
+			}
+			page = "payment/qqH5Pay"+type;
+			System.out.println("ip===="+ip);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		model.addAttribute("orderNum", orderNum);
+		model.addAttribute("ip", ip);
+		
+		return page;
+		
+	}
 	
-	@RequestMapping("/payment/wxH5Confirm")
-	public String wxH5Confirm(Model model,HttpServletRequest request){
+	
+	@RequestMapping("/payment/h5Confirm")
+	public String h5Confirm(Model model,HttpServletRequest request){
 		
 		
 		String memberCode = request.getParameter("memberCode");
@@ -79,7 +103,13 @@ public class H5PayController {
 		params.put("payMoney", payMoney );
 		params.put("sceneInfo", sceneInfo );
 		params.put("ip",  ip);
-	
+		
+		String payType = request.getParameter("payType");
+		if(payType !=null &&!"".equals(payType)){
+			params.put("payType",  payType);
+		}else{
+			payType = "1";
+		}
 		
  		String srcStr = orderedKey(params);
  		System.out.println("srcStr==="+srcStr);
@@ -93,7 +123,14 @@ public class H5PayController {
 		model.addAttribute("ip", ip);
 		model.addAttribute("signStr", signstr);
 		
-		return "payment/wxH5Confirm";
+		if("1".equals(payType)){
+			return "payment/wxH5Confirm";
+		}else if("3".equals(payType)){
+			return "payment/qqH5Confirm";
+		}else{
+			return  "payment/fail";
+		}
+		
 		
 	}
 	
@@ -121,7 +158,7 @@ public class H5PayController {
 	}
 	
 	@RequestMapping("/payment/toWxH5")
-	public String toPayment(Model model,HttpServletRequest request){
+	public String toWxH5(Model model,HttpServletRequest request){
 		String page = "payment/fail";
 		
 		try { // 获取页面请求信息
@@ -187,6 +224,99 @@ public class H5PayController {
 			reqData.put("callbackUrl", callbackUrl);
 			reqData.put("signStr", signStr);
 			
+			JSONObject responseJson = JSONObject.fromObject(
+					HttpUtil.sendPostRequest(SysConfig.pospService + "/api/debitNote/wxH5Pay",
+							CommonUtil.createSecurityRequstData(reqData)));
+			if ("0000".equals(responseJson.getString("returnCode"))) {
+				String payUrl = responseJson.getString("payUrl");
+				request.setAttribute("payUrl", payUrl);
+				model.addAttribute("payUrl", payUrl);
+				page = "payment/wxH5Submit";
+				logger.info("调服务返回payUrl="+payUrl);
+			}else{
+			    request.setAttribute("errorMsg", responseJson.getString("returnMsg"));
+				model.addAttribute("errorMsg", responseJson.getString("returnMsg"));
+			}
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return page;
+		
+	}
+	
+	
+	@RequestMapping("/payment/toH5")
+	public String toH5(Model model,HttpServletRequest request){
+		String page = "payment/fail";
+		
+		try { // 获取页面请求信息
+			
+			String memberCode = request.getParameter("memberCode");
+			String callbackUrl = request.getParameter("callbackUrl");
+			String signStr = request.getParameter("signStr");
+			String orderNum = request.getParameter("orderNum");
+			String payMoney = request.getParameter("payMoney");
+			String sceneInfo = request.getParameter("sceneInfo");
+			String ip = request.getParameter("ip");
+			String payType = request.getParameter("payType");
+			logger.info("进入请求toQqH5");
+			logger.info("memberCode="+memberCode);
+			logger.info("callbackUrl="+callbackUrl);
+			logger.info("signStr="+signStr);
+			logger.info("orderNum="+orderNum);
+			logger.info("payMoney="+payMoney);
+			logger.info("payType="+payType);
+			logger.info("sceneInfo="+sceneInfo);
+			logger.info("ip="+ip);
+		   
+			if(payMoney==null || "".equals(payMoney)){
+				model.addAttribute("errorFlag", "1");
+				model.addAttribute("errorMsg", "支付金额payMoney为空");
+				return page;
+			}
+			if(memberCode==null || "".equals(memberCode)){
+				model.addAttribute("errorFlag", "1");
+				model.addAttribute("errorMsg", "商户号memberCode为空");
+				return page;
+			}
+			if(callbackUrl==null || "".equals(callbackUrl)){
+				model.addAttribute("errorFlag", "1");
+				model.addAttribute("errorMsg", "回调地址callbackUrl为空");
+				return page;
+			}
+			if(orderNum==null || "".equals(orderNum)){
+				model.addAttribute("errorFlag", "1");
+				model.addAttribute("errorMsg", "商户订单号orderNum为空");
+				return page;
+			}
+			
+			if(sceneInfo==null || "".equals(sceneInfo)){
+				model.addAttribute("errorFlag", "1");
+				model.addAttribute("errorMsg", "场景信息sceneInfo为空");
+				return page;
+			}
+			if(ip==null || "".equals(ip)){
+				model.addAttribute("errorFlag", "1");
+				model.addAttribute("errorMsg", "ip为空");
+				return page;
+			}
+			if(signStr==null || "".equals(signStr)){
+				model.addAttribute("errorFlag", "1");
+				model.addAttribute("errorMsg", "签名signStr为空");
+				return page;
+			}
+			if(payType==null || "".equals(payType)){
+				payType = "";
+			}
+			JSONObject reqData = new JSONObject();
+			reqData.put("memberCode", memberCode);
+			reqData.put("orderNum", orderNum);
+			reqData.put("payMoney", payMoney);
+			reqData.put("sceneInfo", sceneInfo);
+			reqData.put("ip", ip);
+			reqData.put("callbackUrl", callbackUrl);
+			reqData.put("signStr", signStr);
+			reqData.put("payType", payType);
 			
 			
 			JSONObject responseJson = JSONObject.fromObject(
