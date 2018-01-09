@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-	<title>微信H5支付</title>
+	<title>QQ钱包H5支付</title>
 	<link href="${ctx }/johu/css/main_style.css" rel="stylesheet" type="text/css">
     <script src="${ctx }/js/jquery-2.2.3.min.js"></script>
     <script type="text/javascript" lang="javascript">
