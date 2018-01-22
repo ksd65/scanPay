@@ -1,12 +1,14 @@
 package com.epay.scanpay.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
@@ -23,6 +25,7 @@ import com.epay.scanpay.common.utils.CommonUtil;
 import com.epay.scanpay.common.utils.HttpUtil;
 import com.epay.scanpay.common.utils.Verify;
 import com.epay.scanpay.entity.SinoPayRequestForm;
+
 
 
 
@@ -77,15 +80,24 @@ public class BankPayController {
 			String memberCode = request.getParameter("memberCode");
 			String callbackUrl = request.getParameter("callbackUrl");
 			String signStr = request.getParameter("signStr");
+			String bankCode = request.getParameter("bankCode");
 
 			JSONObject reqData = new JSONObject();
 			reqData.put("memberCode", memberCode);
 			reqData.put("orderNum", merchantForm.getMerBillNo());
 			reqData.put("payMoney", merchantForm.getAmount());
 			//reqData.put("goodsName", merchantForm.getGoodsName());
-			//reqData.put("gateWayType", merchantForm.getGatewayType());
+			reqData.put("bankCode", bankCode);
 			reqData.put("callbackUrl", callbackUrl);
 			reqData.put("signStr", signStr);
+			
+			logger.info("进入请求toPayment");
+			logger.info("memberCode="+memberCode);
+			logger.info("callbackUrl="+callbackUrl);
+			logger.info("signStr="+signStr);
+			logger.info("orderNum="+merchantForm.getMerBillNo());
+			logger.info("payMoney="+merchantForm.getAmount());
+			logger.info("bankCode="+bankCode);
 			
 			JSONObject responseJson = JSONObject.fromObject(
 					HttpUtil.sendPostRequest(SysConfig.pospService + "/api/bankPay/toPay",
@@ -167,6 +179,30 @@ public class BankPayController {
 	}
 	
 	
+	@RequestMapping("/payment/payResult")
+	public String payResult(Model model,HttpServletRequest request){
+		InputStream is = null;
+		try {
+			StringBuffer notifyResultStr = new StringBuffer("");
+			is = request.getInputStream();
+			byte[] b = new byte[1024];
+			int len = -1;
+			while((len = is.read(b)) != -1){
+				notifyResultStr.append(new String(b,0,len,"utf-8"));
+			}
+			logger.info("payResult前台通知返回报文[{}]",  notifyResultStr );
+			
+			
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		return "payment/payResult";
+		
+	}
 	
 	private SinoPayRequestForm createMerForm(HttpServletRequest request){
 		String billExp = "24";//订单有效期(以小时计算，必须是整数)
