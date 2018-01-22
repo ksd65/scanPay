@@ -47,11 +47,16 @@
 	});
 	
 	function toPay(){
+		
+		if($.trim($("#merCode").val()) == "") {
+		      alert("请输入子商户编码!");
+		      return;
+		}
+		
 		 if($.trim($("#jytext").val()) == "") {
 		      alert("请输入金额!");
 		      return;
 		 }
-		 
 		
 		var payMoney=$.trim($("#jytext").val());
 		
@@ -66,6 +71,9 @@
 	    }
 	    
 	    $("#payMoney").val(payMoney);
+	    $("#routeCode").val($("#rCode").val());
+	    $("#payType").val($("#pType").val());
+	    $("#merchantCode").val($("#merCode").val());
 	    $("#form").submit();
 	}
 	
@@ -80,23 +88,29 @@
 <div id="container">
 
 	<div class="jydivtop">
-		<h1>(89672344)</h1>
+		<h1>H5支付</h1>
 		<div class="xsqdiv">
 			<span>￥</span>
 			<input type="text" id="jytext" class="jytext" name="result" disabled="disabled" placeholder="0">
 		</div>
-	<!-- 	<div class="jybz">
+	 	<div class="jybz">
 			<span>通道</span>
-			<select id="routeCode" name="routeCode" style="width: 80px">
-				<option value="">请选择</option>
-				<option value="1002">杉德</option>
-				<option value="1007">随乐付</option>
+			<select id="rCode" name="rCode" style="width: 80px">
+				<option value="1007">广州H5</option>
+				<option value="1002">杉德H5</option>
 			</select>
 		</div>
 		<div class="jybz">
-			<span>前台回调地址</span>
-			<input type="text" class="bzxx" id="frontUrl" name="frontUrl"/>
-		</div> -->
+			<span>支付方式</span>
+			<select id="pType" name="pType" style="width: 80px">
+				<option value="1">微信</option>
+				<option value="3">QQ</option>
+			</select>
+		</div>
+		<div class="jybz">
+			<span>子商户</span>
+			<input type="text" class="bzxx" id="merCode" name="merCode"/>
+		</div> 
 	</div>
 	<div class="buttons">
 		<div class="butleft">
@@ -120,17 +134,11 @@
 
 </div>
 
-
-
-
-
-
-
-
-
-
-<form id="form" action="${ctx }/payment/h5Confirm" method="post">
-	<input type="hidden" id="memberCode" name="memberCode" value="9010001058">
+<form id="form" action="${ctx }/payment/h5ConfirmTest" method="post">
+	<input type="hidden" id="routeCode" name="routeCode" value="">
+	<input type="hidden" id="payType" name="payType" value="">
+	<input type="hidden" id="merchantCode" name="merchantCode" value="">
+	<input type="hidden" id="memberCode" name="memberCode" value="9010000988">
 	<input type="hidden" id="orderNum" name="orderNum" value="${orderNum }">
 	<input type="hidden" id="payMoney" name="payMoney" value="">
 	<input type="hidden" id="sceneInfo" name="sceneInfo" value="测试">

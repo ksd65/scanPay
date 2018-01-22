@@ -80,7 +80,7 @@
 <div id="container">
 
 	<div class="jydivtop">
-		<h1>厦门哼乐2(84287605)</h1>
+		<h1>(89672253)</h1>
 		<div class="xsqdiv">
 			<span>￥</span>
 			<input type="text" id="jytext" class="jytext" name="result" disabled="disabled" placeholder="0">
