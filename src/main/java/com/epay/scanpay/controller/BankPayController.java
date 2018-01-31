@@ -104,7 +104,7 @@ public class BankPayController {
 							CommonUtil.createSecurityRequstData(reqData)));
 			if ("0000".equals(responseJson.getString("returnCode"))) {
 				String routeCode = responseJson.getString("routeCode");
-				if(DataDicConstant.XF_ROUTE_CODE.equals(routeCode)){
+				if(DataDicConstant.HX_ROUTE_CODE.equals(routeCode)){
 					String action = SysConfig.ipsFormAction;
 					// body部分
 					String bodyXml = "<body>" +
