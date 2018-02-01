@@ -1,6 +1,5 @@
 package com.epay.scanpay.controller;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -8,11 +7,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -57,6 +56,12 @@ public class BankPayController {
 		String gateWayType = request.getParameter("gateWayType");//支付方式 01借记卡 02信用卡
 		String callbackUrl = request.getParameter("callbackUrl");//回调地址
 		String signStr = request.getParameter("signStr"); 
+		
+		String bankCode = request.getParameter("bankCode");
+		if(StringUtils.isBlank(bankCode)){
+			bankCode = "";
+		}
+		
 		model.addAttribute("memberCode", memberCode);
 		model.addAttribute("orderNum", orderNum);
 		model.addAttribute("payMoney", payMoney);
@@ -64,6 +69,7 @@ public class BankPayController {
 		model.addAttribute("gateWayType", gateWayType);
 		model.addAttribute("callbackUrl", callbackUrl);
 		model.addAttribute("signStr", signStr);
+		model.addAttribute("bankCode", bankCode);
 		
 		return "payment/sinopay";
 		
@@ -75,18 +81,26 @@ public class BankPayController {
 		String page = "payment/fail";
 		
 		try { // 获取页面请求信息
-			SinoPayRequestForm merchantForm = createMerForm(request);
 			
 			String memberCode = request.getParameter("memberCode");
 			String callbackUrl = request.getParameter("callbackUrl");
 			String signStr = request.getParameter("signStr");
 			String bankCode = request.getParameter("bankCode");
-
+			String orderNum = request.getParameter("orderNum");
+			String payMoney = request.getParameter("payMoney");
+			if(StringUtils.isBlank(bankCode)){
+				bankCode = "";
+			}
+			String goodsName = request.getParameter("goodsName");
+			if(StringUtils.isBlank(goodsName)){
+				goodsName = "";
+			}
+			
 			JSONObject reqData = new JSONObject();
 			reqData.put("memberCode", memberCode);
-			reqData.put("orderNum", merchantForm.getMerBillNo());
-			reqData.put("payMoney", merchantForm.getAmount());
-			//reqData.put("goodsName", merchantForm.getGoodsName());
+			reqData.put("orderNum", orderNum);
+			reqData.put("payMoney", payMoney);
+			reqData.put("goodsName", goodsName);
 			reqData.put("bankCode", bankCode);
 			reqData.put("callbackUrl", callbackUrl);
 			reqData.put("signStr", signStr);
@@ -95,9 +109,10 @@ public class BankPayController {
 			logger.info("memberCode="+memberCode);
 			logger.info("callbackUrl="+callbackUrl);
 			logger.info("signStr="+signStr);
-			logger.info("orderNum="+merchantForm.getMerBillNo());
-			logger.info("payMoney="+merchantForm.getAmount());
+			logger.info("orderNum="+orderNum);
+			logger.info("payMoney="+payMoney);
 			logger.info("bankCode="+bankCode);
+			logger.info("goodsName="+goodsName);
 			
 			JSONObject responseJson = JSONObject.fromObject(
 					HttpUtil.sendPostRequest(SysConfig.pospService + "/api/bankPay/toPay",
@@ -105,32 +120,40 @@ public class BankPayController {
 			if ("0000".equals(responseJson.getString("returnCode"))) {
 				String routeCode = responseJson.getString("routeCode");
 				if(DataDicConstant.HX_ROUTE_CODE.equals(routeCode)){
-					String action = SysConfig.ipsFormAction;
+					String action = responseJson.getString("payUrl");
 					// body部分
 					String bodyXml = "<body>" +
-							"<MerBillNo>" + merchantForm.getMerBillNo() + "</MerBillNo>" +
+							"<MerBillNo>" + responseJson.getString("orderCode") + "</MerBillNo>" +
 							"<Lang>GB</Lang>" +//语言  中文
-							"<Amount>" + merchantForm.getAmount() + "</Amount>" +
+							"<Amount>" + payMoney + "</Amount>" +
 							"<Date>" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + "</Date>" +
 							"<CurrencyType>156</CurrencyType>" +  //币种 人民币
-							"<GatewayType>" + merchantForm.getGatewayType() + "</GatewayType>" +
-							"<Merchanturl>" + SysConfig.ipsMerchantUrl + "</Merchanturl>" +
-							"<FailUrl><![CDATA[" + merchantForm.getFailUrl() + "]]></FailUrl>" +
-							"<Attach><![CDATA[" + merchantForm.getAttach() + "]]></Attach>" +
+							"<GatewayType>02</GatewayType>" + //01#借记卡 02#信用卡 03#IPS账户支付 
+							"<Merchanturl>" + responseJson.getString("frontUrl") + "</Merchanturl>" +
+							"<FailUrl><![CDATA[" + "" + "]]></FailUrl>" +
+							"<Attach><![CDATA[" + "" + "]]></Attach>" +
 							"<OrderEncodeType>5</OrderEncodeType>" +//订单支付接口加密方式  5:MD5
 							"<RetEncodeType>17</RetEncodeType>" +//交易返回接口加密方式 17:md5摘要
 							"<RetType>1</RetType>" +//Server to Server返回
-							"<ServerUrl><![CDATA[" + SysConfig.ipsServerUrl + "]]></ServerUrl>" +
-							"<BillEXP>" + merchantForm.getBillExp() + "</BillEXP>" +
-							"<GoodsName>" + merchantForm.getGoodsName() + "</GoodsName>" +
-							"<IsCredit></IsCredit>" +//决定商户是否参用直连方式 1:直连  如不用直连方式，此参数不用传值
-							"<BankCode></BankCode>" +
-							"<ProductType></ProductType>" +
-							"</body>";
+							"<ServerUrl><![CDATA[" + responseJson.getString("callBack") + "]]></ServerUrl>" +
+							"<BillEXP>" + "24" + "</BillEXP>" +
+							"<GoodsName>" + responseJson.getString("goodsName") + "</GoodsName>" ;
+							if(responseJson.containsKey("bankCode")&&StringUtils.isNotBlank(responseJson.getString("bankCode"))){
+								bodyXml = bodyXml + "<IsCredit>1</IsCredit>" +//决定商户是否参用直连方式 1:直连  如不用直连方式，此参数不用传值
+										"<BankCode>"+responseJson.getString("bankCode")+"</BankCode>" +
+										"<ProductType>1</ProductType>" +
+										"</body>";
+							}else{
+								bodyXml = bodyXml+"<IsCredit></IsCredit>" +//决定商户是否参用直连方式 1:直连  如不用直连方式，此参数不用传值
+								"<BankCode></BankCode>" +
+								"<ProductType></ProductType>" +
+								"</body>";
+							}
+							
 					// MD5签名
-					String directStr = SysConfig.ipsDirectStr;
+					String directStr = responseJson.getString("privateKey");
 					String sign = DigestUtils
-							.md5Hex(Verify.getBytes(bodyXml + SysConfig.ipsMerCode + directStr,
+							.md5Hex(Verify.getBytes(bodyXml + responseJson.getString("merchantCode") + directStr,
 									"UTF-8"));
 					// xml
 					String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
@@ -138,9 +161,9 @@ public class BankPayController {
 							"<GateWayReq>" +
 							"<head>" +
 							"<Version>v1.0.0</Version>" +
-							"<MerCode>" + SysConfig.ipsMerCode + "</MerCode>" +
-							"<MerName>" + SysConfig.ipsMerName + "</MerName>" +
-							"<Account>" + SysConfig.ipsMerAccount + "</Account>" +
+							"<MerCode>" + responseJson.getString("merchantCode") + "</MerCode>" +
+							"<MerName>" + responseJson.getString("merchantName") + "</MerName>" +
+							"<Account>" + responseJson.getString("merchantAccount") + "</Account>" +
 							"<MsgId>" + "msg" + date + "</MsgId>" +
 							"<ReqDate>" + date + "</ReqDate>" +
 							"<Signature>" + sign + "</Signature>" +
