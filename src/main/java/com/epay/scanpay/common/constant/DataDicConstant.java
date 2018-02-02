@@ -16,6 +16,8 @@ public class DataDicConstant {
 	
 	public static String HX_ROUTE_CODE = "1014";//环迅
 	
+	public static String WW_ROUTE_CODE = "1020";//微微聚合支付
+	
 	public static String PAY_METHOD_SMZF = "001";//扫码支付
 	
 	public static String PAY_METHOD_GZHZF = "003";//公众号H5支付
