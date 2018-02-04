@@ -21,7 +21,7 @@
 
 
 <form id="form" action="${ctx }/payment/toH5" method="post">
-	<input type="hidden" id="payType" name="payType" value="3">
+	<input type="hidden" id="payType" name="payType" value="${payType }">
 	<input type="hidden" id="memberCode" name="memberCode" value="${memberCode }">
 	<input type="hidden" id="orderNum" name="orderNum" value="${orderNum }">
 	<input type="hidden" id="payMoney" name="payMoney" value="${payMoney }">
