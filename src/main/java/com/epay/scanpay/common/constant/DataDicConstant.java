@@ -14,6 +14,10 @@ public class DataDicConstant {
 	
 	public static String SLF_ROUTE_CODE = "1006";//随乐付
 	
+	public static String TB_ROUTE_CODE = "1007";//提呗
+	
+	public static String RF_ROUTE_CODE = "1008";//瑞付支付
+	
 	public static String HX_ROUTE_CODE = "1014";//环迅
 	
 	public static String WW_ROUTE_CODE = "1020";//微微聚合支付

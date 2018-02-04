@@ -1,10 +1,15 @@
 package com.epay.scanpay.controller;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,7 +26,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.epay.scanpay.common.constant.DataDicConstant;
 import com.epay.scanpay.common.constant.SysConfig;
 import com.epay.scanpay.common.utils.CommonUtil;
+import com.epay.scanpay.common.utils.EpaySignUtil;
 import com.epay.scanpay.common.utils.HttpUtil;
+import com.epay.scanpay.common.utils.IpUtils;
 import com.epay.scanpay.common.utils.Verify;
 import com.epay.scanpay.entity.SinoPayRequestForm;
 
@@ -33,45 +40,66 @@ import com.epay.scanpay.entity.SinoPayRequestForm;
 public class BankPayController {
 	private static Logger logger = LoggerFactory.getLogger(DebitNoteController.class);
 	
-	@RequestMapping("/payment/index")
+	@RequestMapping("/payment/bankIndex")
 	public String index(Model model,HttpServletRequest request){
+		String orderNum = "B"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+		String ip = "";
 		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			ip = IpUtils.getIpAddress(request);
+			System.out.println("ip===="+ip);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		model.addAttribute("orderNum", orderNum);
+		model.addAttribute("ip", ip);
+		return "payment/sinopay";
+	}
+	
+	@RequestMapping("/payment/bankConfirm")
+	public String bankConfirm(Model model,HttpServletRequest request){
 		String memberCode = request.getParameter("memberCode");//商家编码
 		String orderNum = request.getParameter("orderNum");//商家订单号
 		String payMoney = request.getParameter("payMoney");//支付金额
 		String goodsName = request.getParameter("goodsName");//商品名称
-		try {
-			System.out.println(goodsName);
-			goodsName = URLDecoder.decode(goodsName, "utf-8");
-			System.out.println(goodsName);
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String gateWayType = request.getParameter("gateWayType");//支付方式 01借记卡 02信用卡
 		String callbackUrl = request.getParameter("callbackUrl");//回调地址
-		String signStr = request.getParameter("signStr"); 
-		
 		String bankCode = request.getParameter("bankCode");
+		//待签名字符串
+		Map<String,String> params = new HashMap<String,String>();
 		if(StringUtils.isBlank(bankCode)){
 			bankCode = "";
+		}else{
+			params.put("bankCode",  bankCode);
 		}
+		if(StringUtils.isBlank(goodsName)){
+			goodsName = "";
+		}else{
+			params.put("goodsName",  goodsName);
+		}
+		
+		String privateKey = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCIxkLM+QBKTqw9BsCSjiLw5pO186HwgMOZIXUFDVnRsYyPeiFsnPgaNQmT7L5Ur0jHtKc0yUdk5jd8BG06N40474MiBzNNNJJa4mkPQfUlsD0T0NMLesjFthKqyQxS1cMqpz8b372pwsWb16BVM/9i5ak9JgqguAtEkxR2lSNd0sn/GEqH9hdw6RvMH/Y/ePztdA3bANJL64g0hrKKBW0YcJvXJpKF8vIwuNuamOoKOzlEIPZC05331j4c8xw/EUiBbS9sELAT+MLNlYXHIWtpDDbJTNZGKXDskJpfae7ifW4TU6ZlraiW4JGabl1d5DH2t4k5NnFqiquPZWPhZ8u9AgMBAAECggEAdGdHsuq4NIWAUO/ONOyDEEMss04GJIlx7oFq9kHGj5Br8DAhAi8VeDhrTlnOIoSLjGtTYrlq6ZSE5CdgTou4xRwSnoNCRhLX/EF06GdaHBlB4ft3oe19scajXHZ+5oDG+SYdr7tbz37Uby20Zs86KxEKV+BoayA3dsU2RTXoQ5BCtMeXaIUif3JjHGy1xHkR1MPN2vXvwMqU7Femk/Qr9s8W+9IgVp5ah28Kx5qkR63TkEONyYTbI+U4El/bVnZmcaHL+/KJ9wo8+/7hHrl+mWV0T3iKa4tJWed9V+IUKrLeUpn9DOIv9WNlDFjJqBckC/GBhujG7uRKWfminGRAgQKBgQDJnQv9HAgUnGsYTayY1iW2CwgFZJn1RgaTCjo1Oc6tDTFXdP4uIFfxEfnLhGuRuItTKHW1hf1Hp4n+wiZO5q1HjjC3bLBUy1Lw+HvaJLNHRkCye58cg2Jlu81girzciazLiHqfEaZxFsUq8WsqzZIBRr0gPDDJMrSOBfkf+hWckwKBgQCtq5WSq/t5Cr1N5AOoYoBDvJOHqQ4/6Ue0JF270/u1H/qdMQ9w/OQRixhHNP7g5oiPBWKPQTs3uU9/SHpX5CHsyqlQDvOkrSnESp4pz0BUOT971er/8o79NrUE9ZQMRDhu0WHXtbPOq+7siUw9SA5HcEh8Hd/Y3xLOFhvw90x4bwKBgGBGFRZ9j0JAW0eUt8mX4RQn+mGQ44/jK3qFlLwb6ZxrQ1eO712ZZkUgn1bW2gMQy78e/+55mDPiRhwYG/DraG1V8d91EFK9cNLO5V2Kzu1HF9fi/lzARHluD6l9NqhdOd1LQ7q30/IGvIpAFDuxRHpFjERbWbSJ+Pwk0Ay8ABvvAoGAah4XFfkqfqqWQ3rY1VHiyAD5MIKXJ2w2mRdDgxqjiegRbW1l3wdXoHSakCAMwYV72dBTie807Pa5Ya/6uau3IwYucLHCJFR+2ecyP5/Y0d3tMZDjuCMRRh3gfDhGjzw8M1KTc4geZ2Fda4D1adiWiQZN9DEY715XEkAmMJYbTtcCgYEAn9BcQcpAsbV2fpmO0VU8CMFoTnbfYpmHR9N6A45r72j1nQmJxfZbvL7JiIK7jhRUuQERC+jK08FPKbFDoE5a7UxNiKDE/ZtuEwPehrf8yVenxmAWMh4llc1HoWQfjCY8BJuAm3K4jHtswB0+PQfTMG7PVisoMfdVEJ4gq8BLAv0=";
+		if("9010000002".equals(memberCode)){
+			privateKey = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCfKi2ZOWOPYsDPj6RT9kV2s5RCOezBoEnAMfVoEbe5eQB5rJhTwRaN2rGHPMlv1baB6dB4yJ49Eidvq9IX4D7lhnbPwvvCi7EjszJgyrID8miVu9wBpPRUdjS+YsrWyGrVK0vMxl79TlQWK22io/yZp9aWTCTgSM3qEyQaMyk6bEANYIUaSlpbiDJ2mvaU6JpSDZJLHKpNvPVNDLk52fpuArOuvHo2Nn0NOrnv8bjAYk8CMxNBuE6xicHl3ycDU8PQ3MKEhWkyNAm/vVH8v37kYcDpx6ftUM7ddAq+SOE9BPvjoxsBNYEKztvZxBdaZHYZUEGtjyBeulzr0L1KZJDtAgMBAAECggEACDG1s0O/GmytHIJ6pU/yd4/7PAWbaMSFx31K8xambMgL/Dekh/tS2+68YQgCHt3TzZBqCS3a5639lcQ0xsHmuw5XI48YQwXKEtpw54bH72gVdk/7naIOaiLDyGFxq+kZhuv5tQspbMURkyqdNFhY8tgvNgGpjFpzL2/Y1fh4UOeYzGFTKMCzpxfHwCdpfFoW4QNGbVvC+IKpuLyKf58hBvSaR8AaFCQ0XTBVl6QbB/8ryWL2xbdg+/+cB4TXwD/Ct3xcLIEF5ow7/1IVyqlSzUelh9SaKq2113T1HGFTr7rELlXplU5J1icV6JEdoq+RplW3SQ9dMesV9l8dhAA3QQKBgQDpKSQPq7nAVCEcEzohiBvZMibW/EBxWBBIXgAc1G/DasfDuTxyW//4gPUeozW4ZMzwnlc31CMkusd806Iecio0+LrKB3V9yFW4fbzcLYdY4tN3oeQ9MoX9nkFM/ikKl2B1HcLmBWZqgg3kdf1hIa/E2YdK/x+NofaSz4lQMjjveQKBgQCuwXnzrk9RqQ7bg8Ol38NAqV+3xQ7hrvzH/Zjifd/sMbGC0y0JgM++3Y5jALsxD7GcQt9V1m31qGlXzW4aitNxdlMpvcSfHdUE9kXgbp9g1rqJDg/hJe+nH7nBI6NmRdrb+Ns0lnNYXBHYAQ/W3M521U46TWtODLcNOXwXbGlMFQKBgQCSkBXm899zkm6tozhrU4+N3ASmJzKrDNxPYSdY+AC5KiogUhQ5HrOslgN/GsDuBA7/Qck5gtQEhpRXVwEVelYlriRcUov8YS3hJsjM7qGhshOTo+RAw72OSyhpKWrLCZTMicS1qrdSRCZPcguwPuiqKMLu1agT87d3WZXLH4bCoQKBgB8lHDbxufEz0BIPSa8mUgYUKZr249AU/7gk2jqDdIUD1j8ao8wtyNibY+UBHFuCEIVo5aTGspI1kZC0bAsO8uAl1mx6BbDWAEECIzH8hSsdGeGTQAFAYZXHcbOaRmTTzk2l7GtS5Pu6bPOyPMBuWd2T5n09jwI6AeW5eQQzrhCBAoGBAKR9CR4SYsH+lcONvAfRC7fQMrS4FwwUbHYUuDEDmDn07oelaJYh7UNbCbNG6x0cHYkJleQlDHyl7hSwHl5pBXzJooSKWCj9Hn3DAfqUouFNZf1kZruoOWBosGt/pKjDzNwVhAp+gCeD9veGZxrvfuVdUgS5yv0fgqQg2qsGdeN3";
+		}
+		
+		
+		params.put("orderNum", orderNum); 
+		params.put("memberCode", memberCode);  
+		params.put("callbackUrl",  callbackUrl);
+		params.put("payMoney", payMoney );
+		
+		String srcStr = orderedKey(params);
+ 		System.out.println("srcStr==="+srcStr);
+		String signstr = EpaySignUtil.sign(privateKey, srcStr);
 		
 		model.addAttribute("memberCode", memberCode);
 		model.addAttribute("orderNum", orderNum);
 		model.addAttribute("payMoney", payMoney);
 		model.addAttribute("goodsName", goodsName);
-		model.addAttribute("gateWayType", gateWayType);
 		model.addAttribute("callbackUrl", callbackUrl);
-		model.addAttribute("signStr", signStr);
+		model.addAttribute("signStr", signstr);
 		model.addAttribute("bankCode", bankCode);
 		
-		return "payment/sinopay";
+		return "payment/bankConfirm";
 		
 	}
 	
@@ -172,8 +200,6 @@ public class BankPayController {
 							"</GateWayReq>" +
 							"</Ips>";
 					System.out.println(">>>>> 订单支付 请求信息: " + xml);
-					request.setAttribute("action", action);
-					request.setAttribute("pGateWayReq", xml);
 					model.addAttribute("action", action);
 					model.addAttribute("pGateWayReq", xml);
 					page = "payment/sinopayPaymentForm";
@@ -181,11 +207,19 @@ public class BankPayController {
 					String msg = responseJson.getString("msg");
 					String payUrl = responseJson.getString("payUrl");
 					System.out.println(">>>>> 订单支付 请求信息: " + msg);
-					request.setAttribute("action", payUrl);
-					request.setAttribute("msg", msg);
 					model.addAttribute("action", payUrl);
 					model.addAttribute("msg", msg);
 					page = "payment/paySubmit";
+				}else if(DataDicConstant.RF_ROUTE_CODE.equals(routeCode)){
+					String payUrl = responseJson.getString("payUrl");
+					
+					model.addAttribute("action", payUrl);
+					model.addAttribute("AppKey", responseJson.getString("merchantCode"));
+					model.addAttribute("OrderNum", responseJson.getString("orderCode"));
+					model.addAttribute("PayMoney", payMoney);
+					model.addAttribute("SuccessUrl", responseJson.getString("frontUrl"));
+					model.addAttribute("SignStr", responseJson.getString("signStr"));
+					page = "payment/rfBankSubmit";
 				}else{
 					request.setAttribute("errorMsg", "当前商户不支持网银支付");
 					model.addAttribute("errorMsg", "当前商户不支持网银支付");
@@ -261,5 +295,26 @@ public class BankPayController {
 		return merchantForm;
 	}
 	
+	private String orderedKey(Map<String, String> dataMap){
+		ArrayList<String> list = new ArrayList<String>();
+		for(String key:dataMap.keySet()){
+			if(dataMap.get(key)!=null&&!"".equals(dataMap.get(key))){
+				list.add(key + "=" + dataMap.get(key));
+			}
+		}
+		int size = list.size();
+		String [] arrayToSort = list.toArray(new String[size]);
+		Arrays.sort(arrayToSort, String.CASE_INSENSITIVE_ORDER);
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < size; i ++) {
+			sb.append(arrayToSort[i]);
+			sb.append("&");
+		}
+		String result = sb.toString();
+		if(StringUtils.isNotBlank(result)){//去掉最后的&
+			result = result.substring(0, result.length()-1);
+		}
+		return result;
+	}
 
 }
