@@ -1,9 +1,7 @@
 package com.epay.scanpay.controller;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,9 +26,11 @@ import com.epay.scanpay.common.constant.SysConfig;
 import com.epay.scanpay.common.utils.CommonUtil;
 import com.epay.scanpay.common.utils.EpaySignUtil;
 import com.epay.scanpay.common.utils.HttpUtil;
+import com.epay.scanpay.common.utils.HxUtils;
 import com.epay.scanpay.common.utils.IpUtils;
 import com.epay.scanpay.common.utils.Verify;
 import com.epay.scanpay.entity.SinoPayRequestForm;
+
 
 
 
@@ -236,28 +236,59 @@ public class BankPayController {
 	}
 	
 	
-	@RequestMapping("/payment/payResult")
+	@RequestMapping("/payment/result")
 	public String payResult(Model model,HttpServletRequest request){
-		InputStream is = null;
+		
 		try {
-			StringBuffer notifyResultStr = new StringBuffer("");
-			is = request.getInputStream();
-			byte[] b = new byte[1024];
-			int len = -1;
-			while((len = is.read(b)) != -1){
-				notifyResultStr.append(new String(b,0,len,"utf-8"));
+			request.setCharacterEncoding("UTF-8");
+			String resultXml = request.getParameter("paymentResult");
+			logger.info("payResult前台通知返回报文[{}]",  resultXml );
+			
+			String merCode = SysConfig.ipsMerCode;
+			String directStr = SysConfig.ipsDirectStr;
+			String resultMessage = "";
+			String totalAmount = "0";
+			boolean flag = false;
+			if(resultXml != null&&!"".equals(resultXml)){
+				boolean checkSign = HxUtils.checkSign(resultXml, merCode, directStr, null);
+				if(!checkSign){
+					resultMessage =  "验证签名不通过";
+				}else{
+					String resultCode = HxUtils.getRspCode(resultXml);
+					if("000000".equals(resultCode)){
+						String status = HxUtils.getStatus(resultXml);
+						if (status.equals("Y")) {
+							totalAmount = HxUtils.getAmount(resultXml);
+							resultMessage = "恭喜您！支付成功！";
+							model.addAttribute("ImageUrl", SysConfig.payService+File.separator+"images/ggimg.png");
+							model.addAttribute("Href", "");
+							flag = true;
+						} else if (status.equals("N")) {
+							resultMessage = "亲，支付失败啦，请重新支付!";
+						} else if (status.equals("P")) {
+							resultMessage = "您的支付正处理中.......";
+							model.addAttribute("oriRespType", "R");
+						}
+					}else{
+						resultMessage = "交易不确定!";
+					}
+				}
+			}else{
+				resultMessage = "交易不确定!";
 			}
-			logger.info("payResult前台通知返回报文[{}]",  notifyResultStr );
+			model.addAttribute("totalAmount", totalAmount);
+			model.addAttribute("resultMessage", resultMessage);
 			
-			
-			
+			if (flag) {
+			    return "debitNote/scanResultSuccess";
+			} else {
+			    return "debitNote/scanResult";
+			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		
-		return "payment/payResult";
+		return "debitNote/scanResult";
 		
 	}
 	
