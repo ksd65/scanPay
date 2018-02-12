@@ -30,7 +30,7 @@
     <script type="text/javascript" lang="javascript">
 	
 	
-	function toPay(){alert($("#payMoney").val())
+	function toPay(){
 		 if($.trim($("#payMoney").val()) == "") {
 		      alert("请输入金额!");
 		      return;
@@ -52,8 +52,38 @@
 	    $("#pay").submit();
 	}
 	
-	
-	
+	function getBankList(){
+		var url = "${ctx }/common/getBankList";
+		var data = {};
+		$.ajax({
+			url:url,
+			data:data,
+			type:'post',
+			cache:false, 
+			async:false,
+			dataType:'json',
+			success:function(data) {
+				if(data.returnCode=="0000"){//请求成功
+					var bankHtml = "";
+					bankHtml = "<option value=''>请选择银行</option>";
+					var bankList = data.resData.bankList;
+					for(var i=0;i<bankList.length;i++){
+						bankHtml = bankHtml + "<option value='"+bankList[i].code+"'>"+bankList[i].name+"</option>";
+					}
+					$("select[name='bankCode']").html(bankHtml);
+				}else{
+					alert(data.returnMsg);
+				}
+				
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {    
+		        alert("请求出错");
+		    }
+		});
+	}
+	$(document).ready(function(){
+		getBankList();  
+	});
 </script>
 
     <%
@@ -66,8 +96,8 @@
 <body bgcolor="#FFFFFF">
 
 <form name="pay" method="post" action="${ctx}/payment/bankConfirm" id="pay">
-    <input type="hidden" id="memberCode" name="memberCode" value="9010000988">  
-	<!--<input type="hidden" id="memberCode" name="memberCode" value="9010000002">-->
+   <!-- <input type="hidden" id="memberCode" name="memberCode" value="9010000988"> --> 
+	<input type="hidden" id="memberCode" name="memberCode" value="9010000002">
 	<input type="hidden" id="orderNum" name="orderNum" value="${orderNum }">
 	<input type="hidden" id="ip" name="ip" value="${ip }">
 	<input type="hidden" id="callbackUrl" name="callbackUrl" value="http://www.johutech.com:8682/johuPosp/cashierDesk/testCallBack">
@@ -204,6 +234,15 @@
             <td>商品名称</td>
             <td><input id="goodsName" name="goodsName" size="16" value="" type="text"></td>
         </tr>
+        <tr>
+        	<td>银行</td>
+            <td>
+                <select name="bankCode" style="width: 115px">
+                    
+                </select>
+            </td>
+        <tr>
+        
      <!--   <tr>
             <td>订单有效期(小时为单位)</td>
             <td><input name="BillEXP" size="16" type="text" value="96"></td>

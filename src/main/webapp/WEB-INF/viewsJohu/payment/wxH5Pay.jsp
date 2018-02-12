@@ -72,8 +72,8 @@
 	
 	
 </script>
-    
-    
+ 
+     
 </head>
 <body>
 
@@ -130,7 +130,8 @@
 
 
 <form id="form" action="${ctx }/payment/h5Confirm" method="post">
-	<input type="hidden" id="memberCode" name="memberCode" value="9010000988">
+	<input type="hidden" id="memberCode" name="memberCode" value="9010000988">  
+	<!--<input type="hidden" id="memberCode" name="memberCode" value="9010000002">-->
 	<input type="hidden" id="orderNum" name="orderNum" value="${orderNum }">
 	<input type="hidden" id="payMoney" name="payMoney" value="">
 	<input type="hidden" id="sceneInfo" name="sceneInfo" value="测试">
