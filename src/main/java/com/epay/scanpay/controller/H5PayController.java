@@ -106,6 +106,30 @@ public class H5PayController {
 		
 	}
 	
+	@RequestMapping("/payment/h5indexzfb")
+	public String indexZfb(Model model,HttpServletRequest request){
+		String orderNum = "H"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+		String ip = "";
+		String page = "";
+		try {
+			ip = IpUtils.getIpAddress(request);
+			String type = request.getParameter("type");
+			if(type== null ||"".equals(type)){
+				type = "";
+			}
+			page = "payment/zfbH5Pay"+type;
+			System.out.println("ip===="+ip);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		model.addAttribute("orderNum", orderNum);
+		model.addAttribute("ip", ip);
+		
+		return page;
+		
+	}
+	
 	
 	@RequestMapping("/payment/h5Confirm")
 	public String h5Confirm(Model model,HttpServletRequest request){
@@ -155,7 +179,7 @@ public class H5PayController {
 		
 		if("1".equals(payType)){
 			return "payment/wxH5Confirm";
-		}else if("3".equals(payType)||"5".equals(payType)){
+		}else if("3".equals(payType)||"5".equals(payType)||"2".equals(payType)){
 			return "payment/qqH5Confirm";
 		}else{
 			return  "payment/fail";
