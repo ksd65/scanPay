@@ -220,6 +220,23 @@ public class BankPayController {
 					model.addAttribute("SuccessUrl", responseJson.getString("frontUrl"));
 					model.addAttribute("SignStr", responseJson.getString("signStr"));
 					page = "payment/rfBankSubmit";
+				}else if(DataDicConstant.CJWG_ROUTE_CODE.equals(routeCode)){
+					String payUrl = responseJson.getString("payUrl");
+					
+					model.addAttribute("action", payUrl);
+					model.addAttribute("v_mid", responseJson.getString("merchantCode"));
+					model.addAttribute("v_oid", responseJson.getString("orderCode"));
+					model.addAttribute("v_time", responseJson.getString("v_time"));
+					model.addAttribute("v_bankAddr", responseJson.getString("bankCode"));
+					model.addAttribute("v_productName", responseJson.getString("goodsName"));
+					model.addAttribute("v_productDesc", responseJson.getString("goodsName"));
+					model.addAttribute("v_cardType", responseJson.getString("cardType"));
+					model.addAttribute("v_notify_url", responseJson.getString("callBack"));
+					model.addAttribute("v_url", responseJson.getString("frontUrl"));
+					
+					model.addAttribute("v_txnAmt", payMoney);
+					model.addAttribute("v_sign", responseJson.getString("signStr"));
+					page = "payment/cjBankSubmit";
 				}else{
 					request.setAttribute("errorMsg", "当前商户不支持网银支付");
 					model.addAttribute("errorMsg", "当前商户不支持网银支付");
