@@ -24,9 +24,7 @@ function closeWin(){
 		<span>支付状态：成功</span>
 	</div>
 	<div class="zfcgimg">
-		<a href="${Href}">
-			<img src="${ImageUrl}" />
-		</a>
+		<img src="${ImageUrl}" />
 	</div>
 </div>
 
