@@ -261,6 +261,13 @@ public class BankPayController {
 			String resultXml = request.getParameter("paymentResult");
 			logger.info("payResult前台通知返回报文[{}]",  resultXml );
 			
+			JSONObject reqData = new JSONObject();
+			reqData.put("paymentResult", resultXml);
+			
+			JSONObject responseJson = JSONObject.fromObject(
+					HttpUtil.sendPostRequest(SysConfig.pospService + "/api/bankPay/hxPayNotifyDeal",
+							CommonUtil.createSecurityRequstData(reqData)));
+			
 			String merCode = SysConfig.ipsMerCode;
 			String directStr = SysConfig.ipsDirectStr;
 			String resultMessage = "";
