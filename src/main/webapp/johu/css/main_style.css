@@ -84,8 +84,8 @@ input{margin:0;padding:0;}
 .zcshxx dl span.xx{width:65%;color:#2b2b2b;}
 
 .ddewmdiv{display:block;overflow:hidden;}
-.ddewmdiv .smr{display:block;width:56%;margin:1rem auto 0;}
-.ddewmdiv .smewm{width:50%;border:5px solid #53cbc9;border-radius:0.3rem;background: #fff;margin:0 auto;}
+.ddewmdiv .smr{display:block;width:36%;margin:1rem auto 0;}
+.ddewmdiv .smewm{width:200px;border:5px solid #53cbc9;border-radius:0.3rem;background: #fff;margin:50px auto 0;}
 .smewm img{display:block;width:95%;margin:0.2rem auto;}
 .ddewmdiv .sma{display:block;width:20%;margin:1.5rem auto 1rem;}
 .ddewmdiv span{display:block;text-align: center;font:1rem/2rem "微软雅黑";color:#f15a4a;}
