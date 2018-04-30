@@ -1,6 +1,8 @@
 package com.epay.scanpay.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -532,7 +534,7 @@ public class QuickPayController {
 				flag = true;
 				
 			}else{
-				resultMessage = inparam.get("RESP_DESC");;
+				resultMessage = URLDecoder.decode(inparam.get("RESP_DESC"), "UTF-8");
 			}
 			model.addAttribute("totalAmount", totalAmount);
 			model.addAttribute("resultMessage", resultMessage);
@@ -549,4 +551,5 @@ public class QuickPayController {
 		return "debitNote/scanResult";
 		
 	}
+	
 }

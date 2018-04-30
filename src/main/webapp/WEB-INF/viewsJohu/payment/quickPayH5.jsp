@@ -72,9 +72,7 @@
 	    
 	    $("#payMoney").val(payMoney);
 	    $("#goodsName").val($.trim($("#goodsNameT").val()));
-	    $("#accountName").val($.trim($("#accountNameT").val()));
 	    $("#bankAccount").val($.trim($("#bankAccountT").val()));
-	    $("#certNo").val($.trim($("#certNoT").val()));
 	    $("#tel").val($.trim($("#telT").val()));
 	    $("#form").submit();
 	}
@@ -98,14 +96,6 @@
 		<div class="jybz">
 			<span>商品名称</span>
 			<input type="text" class="bzxx" id="goodsNameT" name="goodsNameT"/>
-		</div> 
-		<div class="jybz">
-			<span>账户名称</span>
-			<input type="text" class="bzxx" id="accountNameT" name="accountNameT"/>
-		</div> 
-		<div class="jybz">
-			<span>身份证号码</span>
-			<input type="text" class="bzxx" id="certNoT" name="certNoT"/>
 		</div> 
 		<div class="jybz">
 			<span>银行卡号</span>
@@ -152,9 +142,7 @@
 	<input type="hidden" id="orderNum" name="orderNum" value="${orderNum }">
 	<input type="hidden" id="payMoney" name="payMoney" value="">
 	<input type="hidden" id="goodsName" name="goodsName" value="">
-	<input type="hidden" id="accountName" name="accountName" value="">
 	<input type="hidden" id="bankAccount" name="bankAccount" value="">
-	<input type="hidden" id="certNo" name="certNo" value="">
 	<input type="hidden" id="tel" name="tel" value="">
 	<input type="hidden" id="callbackUrl" name="callbackUrl" value="http://www.johutech.com:8682/johuPosp/cashierDesk/testCallBack">
 </form>
