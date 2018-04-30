@@ -26,6 +26,10 @@
     <input type="hidden" id="payMoney" name="payMoney" value="${payMoney }"/>
     <input type="hidden" id="goodsName" name="goodsName" value="${goodsName }"/>
     <input type="hidden" id="orderNum" name="orderNum" value="${orderNum }"/>
+    <input type="hidden" id="accountName" name="accountName" value="${accountName }">
+	<input type="hidden" id="bankAccount" name="bankAccount" value="${bankAccount }">
+	<input type="hidden" id="certNo" name="certNo" value="${certNo }">
+	<input type="hidden" id="tel" name="tel" value="${tel }">
     <input type="hidden" id="signStr" name="signStr" value="${signStr }"/>
 </form>
 <script type="text/javascript">
