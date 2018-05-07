@@ -31,6 +31,7 @@ import com.epay.scanpay.common.excep.ArgException;
 import com.epay.scanpay.common.utils.AlipayAPIClientFactory;
 import com.epay.scanpay.common.utils.CommonUtil;
 import com.epay.scanpay.common.utils.HttpUtil;
+import com.epay.scanpay.common.utils.IpUtils;
 import com.epay.scanpay.common.utils.SessionUtils;
 import com.epay.scanpay.entity.MemberInfo;
 
@@ -458,7 +459,14 @@ public class DebitNoteController {
 			reqData.put("epayCode", epayCode);
 			reqData.put("userId", userId);
 			reqData.put("remark", remark);
-
+			String ip = "";
+			try {
+				ip = IpUtils.getIpAddress(request);
+				System.out.println("ip===="+ip);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			reqData.put("ip", ip);
 			String ua = request.getHeader("user-agent").toLowerCase();
 			reqData.put("appClientType", "other");
 			if (ua.indexOf("micromessenger") > 0) {
@@ -489,6 +497,7 @@ public class DebitNoteController {
 		return result;
 	}
 
+	
 	@RequestMapping("/debitNote/payCallBack")
 	public String payCallBack(Model model, HttpServletRequest request) {
 
