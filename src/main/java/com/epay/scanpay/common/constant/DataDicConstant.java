@@ -26,6 +26,10 @@ public class DataDicConstant {
 	
 	public static String ML_ROUTE_CODE = "1031";//米联
 	
+	public static String ESKKJ_ROUTE_CODE = "1033";//易收款快捷
+	
+	public static String ESKWG_ROUTE_CODE = "1034";//易收款网银
+	
 	public static String PAY_METHOD_SMZF = "001";//扫码支付
 	
 	public static String PAY_METHOD_GZHZF = "003";//公众号H5支付

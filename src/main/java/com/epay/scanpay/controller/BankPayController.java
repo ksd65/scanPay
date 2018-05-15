@@ -116,6 +116,7 @@ public class BankPayController {
 			String bankCode = request.getParameter("bankCode");
 			String orderNum = request.getParameter("orderNum");
 			String payMoney = request.getParameter("payMoney");
+			String ip = IpUtils.getIpAddress(request);
 			if(StringUtils.isBlank(bankCode)){
 				bankCode = "";
 			}
@@ -132,6 +133,7 @@ public class BankPayController {
 			reqData.put("bankCode", bankCode);
 			reqData.put("callbackUrl", callbackUrl);
 			reqData.put("signStr", signStr);
+			reqData.put("ip", ip);
 			
 			logger.info("进入请求toPayment");
 			logger.info("memberCode="+memberCode);
@@ -237,6 +239,11 @@ public class BankPayController {
 					model.addAttribute("v_txnAmt", payMoney);
 					model.addAttribute("v_sign", responseJson.getString("signStr"));
 					page = "payment/cjBankSubmit";
+				}else if(DataDicConstant.ESKWG_ROUTE_CODE.equals(routeCode)){
+					String payUrl = responseJson.getString("payUrl");
+					
+					model.addAttribute("action", payUrl);
+					page = "payment/eskBankSubmit";
 				}else{
 					request.setAttribute("errorMsg", "当前商户不支持网银支付");
 					model.addAttribute("errorMsg", "当前商户不支持网银支付");

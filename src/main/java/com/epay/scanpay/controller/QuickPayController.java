@@ -33,6 +33,7 @@ import com.epay.scanpay.common.utils.CommonUtil;
 import com.epay.scanpay.common.utils.EpaySignUtil;
 import com.epay.scanpay.common.utils.HttpClient4Util;
 import com.epay.scanpay.common.utils.HttpUtil;
+import com.epay.scanpay.common.utils.IpUtils;
 import com.epay.scanpay.common.utils.Verify;
 
 @Controller
@@ -387,6 +388,7 @@ public class QuickPayController {
 			String bankAccount = request.getParameter("bankAccount");//
 			String certNo = request.getParameter("certNo");//
 			String tel = request.getParameter("tel");//
+			String ip = IpUtils.getIpAddress(request);
 			if(StringUtils.isBlank(goodsName)){
 				goodsName = "";
 			}
@@ -413,6 +415,7 @@ public class QuickPayController {
 			reqData.put("certNo", certNo);
 			reqData.put("tel", tel);
 			reqData.put("callbackUrl", callbackUrl);
+			reqData.put("ip", ip);
 			reqData.put("signStr", signStr);
 			
 			logger.info("进入请求toQuickPayH5,参数："+reqData.toString());
@@ -490,6 +493,11 @@ public class QuickPayController {
 					}
 					model.addAttribute("action", action);
 					page = "payment/quickPayH5Ml";
+					
+				}else if(DataDicConstant.ESKKJ_ROUTE_CODE.equals(routeCode)){
+					String action = responseJson.getString("payUrl");
+					model.addAttribute("action", action);
+					page = "payment/quickPayH5Esk";
 					
 				}else{
 					request.setAttribute("errorMsg", "当前商户不支持快捷支付");
