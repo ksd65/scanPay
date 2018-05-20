@@ -560,4 +560,163 @@ public class QuickPayController {
 		
 	}
 	
+	
+	@RequestMapping("/payment/bindCardIndex")
+	public String bindCardIndex(Model model,HttpServletRequest request){
+		String orderNum = "Q"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+		model.addAttribute("orderNum", orderNum);
+		return "payment/bindCardIndex";
+	}
+	
+	@RequestMapping("/payment/bindCardConfirm")
+	public String bindCardConfirm(Model model,HttpServletRequest request){
+		String page = "payment/fail";
+		
+		try { // 获取页面请求信息
+			Map<String,String> param = new HashMap<String, String>();
+			String memberCode = request.getParameter("memberCode");
+			String orderNum = request.getParameter("orderNum");
+			String accountType = request.getParameter("accountType");
+			String bankCode = request.getParameter("bankCode");
+			String bankAccount = request.getParameter("bankAccount");
+			String accountName = request.getParameter("accountName");
+			String tel = request.getParameter("tel");
+			String certNbr = request.getParameter("certNbr");
+			String bankCvv = request.getParameter("bankCvv");
+			String bankYxq = request.getParameter("bankYxq");
+			param.put("memberCode", memberCode);
+			param.put("bankCode", bankCode);
+			param.put("accountType", accountType);
+			param.put("bankAccount", bankAccount);
+			param.put("accountName", accountName);
+			param.put("tel", tel);
+			param.put("orderNum", orderNum);
+			param.put("certNbr", certNbr);
+			
+			if(StringUtils.isBlank(bankCvv)){
+				bankCvv = "";
+			}else{
+				param.put("bankCvv", bankCvv);
+			}
+			if(StringUtils.isBlank(bankYxq)){
+				bankYxq = "";
+			}else{
+				param.put("bankYxq", bankYxq);
+			}
+			
+			
+			String privateKey = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCIxkLM+QBKTqw9BsCSjiLw5pO186HwgMOZIXUFDVnRsYyPeiFsnPgaNQmT7L5Ur0jHtKc0yUdk5jd8BG06N40474MiBzNNNJJa4mkPQfUlsD0T0NMLesjFthKqyQxS1cMqpz8b372pwsWb16BVM/9i5ak9JgqguAtEkxR2lSNd0sn/GEqH9hdw6RvMH/Y/ePztdA3bANJL64g0hrKKBW0YcJvXJpKF8vIwuNuamOoKOzlEIPZC05331j4c8xw/EUiBbS9sELAT+MLNlYXHIWtpDDbJTNZGKXDskJpfae7ifW4TU6ZlraiW4JGabl1d5DH2t4k5NnFqiquPZWPhZ8u9AgMBAAECggEAdGdHsuq4NIWAUO/ONOyDEEMss04GJIlx7oFq9kHGj5Br8DAhAi8VeDhrTlnOIoSLjGtTYrlq6ZSE5CdgTou4xRwSnoNCRhLX/EF06GdaHBlB4ft3oe19scajXHZ+5oDG+SYdr7tbz37Uby20Zs86KxEKV+BoayA3dsU2RTXoQ5BCtMeXaIUif3JjHGy1xHkR1MPN2vXvwMqU7Femk/Qr9s8W+9IgVp5ah28Kx5qkR63TkEONyYTbI+U4El/bVnZmcaHL+/KJ9wo8+/7hHrl+mWV0T3iKa4tJWed9V+IUKrLeUpn9DOIv9WNlDFjJqBckC/GBhujG7uRKWfminGRAgQKBgQDJnQv9HAgUnGsYTayY1iW2CwgFZJn1RgaTCjo1Oc6tDTFXdP4uIFfxEfnLhGuRuItTKHW1hf1Hp4n+wiZO5q1HjjC3bLBUy1Lw+HvaJLNHRkCye58cg2Jlu81girzciazLiHqfEaZxFsUq8WsqzZIBRr0gPDDJMrSOBfkf+hWckwKBgQCtq5WSq/t5Cr1N5AOoYoBDvJOHqQ4/6Ue0JF270/u1H/qdMQ9w/OQRixhHNP7g5oiPBWKPQTs3uU9/SHpX5CHsyqlQDvOkrSnESp4pz0BUOT971er/8o79NrUE9ZQMRDhu0WHXtbPOq+7siUw9SA5HcEh8Hd/Y3xLOFhvw90x4bwKBgGBGFRZ9j0JAW0eUt8mX4RQn+mGQ44/jK3qFlLwb6ZxrQ1eO712ZZkUgn1bW2gMQy78e/+55mDPiRhwYG/DraG1V8d91EFK9cNLO5V2Kzu1HF9fi/lzARHluD6l9NqhdOd1LQ7q30/IGvIpAFDuxRHpFjERbWbSJ+Pwk0Ay8ABvvAoGAah4XFfkqfqqWQ3rY1VHiyAD5MIKXJ2w2mRdDgxqjiegRbW1l3wdXoHSakCAMwYV72dBTie807Pa5Ya/6uau3IwYucLHCJFR+2ecyP5/Y0d3tMZDjuCMRRh3gfDhGjzw8M1KTc4geZ2Fda4D1adiWiQZN9DEY715XEkAmMJYbTtcCgYEAn9BcQcpAsbV2fpmO0VU8CMFoTnbfYpmHR9N6A45r72j1nQmJxfZbvL7JiIK7jhRUuQERC+jK08FPKbFDoE5a7UxNiKDE/ZtuEwPehrf8yVenxmAWMh4llc1HoWQfjCY8BJuAm3K4jHtswB0+PQfTMG7PVisoMfdVEJ4gq8BLAv0=";
+			if("9010000002".equals(memberCode)||"9010000947".equals(memberCode)||"9010000952".equals(memberCode)){
+				privateKey = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCfKi2ZOWOPYsDPj6RT9kV2s5RCOezBoEnAMfVoEbe5eQB5rJhTwRaN2rGHPMlv1baB6dB4yJ49Eidvq9IX4D7lhnbPwvvCi7EjszJgyrID8miVu9wBpPRUdjS+YsrWyGrVK0vMxl79TlQWK22io/yZp9aWTCTgSM3qEyQaMyk6bEANYIUaSlpbiDJ2mvaU6JpSDZJLHKpNvPVNDLk52fpuArOuvHo2Nn0NOrnv8bjAYk8CMxNBuE6xicHl3ycDU8PQ3MKEhWkyNAm/vVH8v37kYcDpx6ftUM7ddAq+SOE9BPvjoxsBNYEKztvZxBdaZHYZUEGtjyBeulzr0L1KZJDtAgMBAAECggEACDG1s0O/GmytHIJ6pU/yd4/7PAWbaMSFx31K8xambMgL/Dekh/tS2+68YQgCHt3TzZBqCS3a5639lcQ0xsHmuw5XI48YQwXKEtpw54bH72gVdk/7naIOaiLDyGFxq+kZhuv5tQspbMURkyqdNFhY8tgvNgGpjFpzL2/Y1fh4UOeYzGFTKMCzpxfHwCdpfFoW4QNGbVvC+IKpuLyKf58hBvSaR8AaFCQ0XTBVl6QbB/8ryWL2xbdg+/+cB4TXwD/Ct3xcLIEF5ow7/1IVyqlSzUelh9SaKq2113T1HGFTr7rELlXplU5J1icV6JEdoq+RplW3SQ9dMesV9l8dhAA3QQKBgQDpKSQPq7nAVCEcEzohiBvZMibW/EBxWBBIXgAc1G/DasfDuTxyW//4gPUeozW4ZMzwnlc31CMkusd806Iecio0+LrKB3V9yFW4fbzcLYdY4tN3oeQ9MoX9nkFM/ikKl2B1HcLmBWZqgg3kdf1hIa/E2YdK/x+NofaSz4lQMjjveQKBgQCuwXnzrk9RqQ7bg8Ol38NAqV+3xQ7hrvzH/Zjifd/sMbGC0y0JgM++3Y5jALsxD7GcQt9V1m31qGlXzW4aitNxdlMpvcSfHdUE9kXgbp9g1rqJDg/hJe+nH7nBI6NmRdrb+Ns0lnNYXBHYAQ/W3M521U46TWtODLcNOXwXbGlMFQKBgQCSkBXm899zkm6tozhrU4+N3ASmJzKrDNxPYSdY+AC5KiogUhQ5HrOslgN/GsDuBA7/Qck5gtQEhpRXVwEVelYlriRcUov8YS3hJsjM7qGhshOTo+RAw72OSyhpKWrLCZTMicS1qrdSRCZPcguwPuiqKMLu1agT87d3WZXLH4bCoQKBgB8lHDbxufEz0BIPSa8mUgYUKZr249AU/7gk2jqDdIUD1j8ao8wtyNibY+UBHFuCEIVo5aTGspI1kZC0bAsO8uAl1mx6BbDWAEECIzH8hSsdGeGTQAFAYZXHcbOaRmTTzk2l7GtS5Pu6bPOyPMBuWd2T5n09jwI6AeW5eQQzrhCBAoGBAKR9CR4SYsH+lcONvAfRC7fQMrS4FwwUbHYUuDEDmDn07oelaJYh7UNbCbNG6x0cHYkJleQlDHyl7hSwHl5pBXzJooSKWCj9Hn3DAfqUouFNZf1kZruoOWBosGt/pKjDzNwVhAp+gCeD9veGZxrvfuVdUgS5yv0fgqQg2qsGdeN3";
+			}
+			String srcStr = orderedKey(param);
+	 		System.out.println("srcStr==="+srcStr);
+			String signstr = EpaySignUtil.sign(privateKey, srcStr);
+			param.put("signStr", signstr);
+			
+			model.addAttribute("memberCode", memberCode);
+			model.addAttribute("orderNum", orderNum);
+			model.addAttribute("accountType", accountType);
+			model.addAttribute("bankCode", bankCode);
+			model.addAttribute("accountName", accountName);
+			model.addAttribute("bankAccount", bankAccount);
+			model.addAttribute("bankCvv", bankCvv);
+			model.addAttribute("tel", tel);
+			model.addAttribute("certNbr", certNbr);
+			model.addAttribute("bankYxq", bankYxq);
+			model.addAttribute("signStr", signstr);
+			
+			return "payment/bindCardConfirm";
+			
+			
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return page;
+		
+	}
+	
+	@RequestMapping("/quickPay/bindCard")
+	public String bindCard(Model model,HttpServletRequest request){
+		String page = "payment/fail";
+		
+		try { // 获取页面请求信息
+			
+			String memberCode = request.getParameter("memberCode");
+			String orderNum = request.getParameter("orderNum");
+			String accountType = request.getParameter("accountType");
+			String bankCode = request.getParameter("bankCode");
+			String bankAccount = request.getParameter("bankAccount");
+			String accountName = request.getParameter("accountName");
+			String tel = request.getParameter("tel");
+			String bankCvv = request.getParameter("bankCvv");
+			String bankYxq = request.getParameter("bankYxq");
+			String signStr = request.getParameter("signStr");
+			String certNbr = request.getParameter("certNbr");
+			
+			Map<String,Object> reqData = new HashMap<String, Object>();
+			reqData.put("memberCode", memberCode);
+			reqData.put("orderNum", orderNum);
+			reqData.put("accountType", accountType);
+			reqData.put("bankCode", bankCode);
+			reqData.put("accountName", accountName);
+			reqData.put("bankAccount", bankAccount);
+			reqData.put("tel", tel);
+			reqData.put("bankCvv", bankCvv);
+			reqData.put("bankYxq", bankYxq);
+			reqData.put("certNbr", certNbr);
+			reqData.put("signStr", signStr);
+			
+			logger.info("进入请求bindCard,参数："+reqData.toString());
+			
+			
+			List<NameValuePair> nvps = new LinkedList<NameValuePair>();
+			List<String> keys = new ArrayList<String>(reqData.keySet());
+			for (int i = 0; i < keys.size(); i++) {
+				String name=(String) keys.get(i);
+				String value=(String) reqData.get(name);
+				if(value!=null && !"".equals(value)){
+					nvps.add(new BasicNameValuePair(name, value));
+				}
+			}
+			
+			byte[] b = HttpClient4Util.getInstance().doPost(SysConfig.pospService + "/quickPay/bindCard", null, nvps);
+			String respStr = new String(b, "utf-8");
+			JSONObject responseJson = JSONObject.fromObject(respStr);
+			if ("0000".equals(responseJson.getString("returnCode"))) {
+				page = "payment/bindResult";
+				if(responseJson.containsKey("PAY_INFO")){
+					String payInfo = responseJson.getString("PAY_INFO");
+					model.addAttribute("PAY_INFO", payInfo);
+				}
+				model.addAttribute("orderNum", orderNum);
+				model.addAttribute("returnCode", "0000");
+			}else{
+			    model.addAttribute("errorMsg", responseJson.getString("returnMsg"));
+			}
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return page;
+		
+	}
+	
+	@RequestMapping("/payment/bindCardNotify")
+	public String bindCardNotify(Model model,HttpServletRequest request){
+		
+		try {
+			JSONObject reqData = new JSONObject();
+			reqData.put("orderCode", request.getParameter("orderCode"));
+			JSONObject result = JSONObject
+					.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService + "/api/quickPay/queryBindCard",
+							CommonUtil.createSecurityRequstData(reqData)));
+			model.addAttribute("returnMsg", result.getString("returnMsg"));
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return "payment/bindMsg";
+		
+	}
+	
 }

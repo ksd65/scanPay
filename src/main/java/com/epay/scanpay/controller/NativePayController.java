@@ -178,8 +178,8 @@ public class NativePayController {
 			}
 			String ua = agent.toLowerCase();
 			if (!(ua.indexOf("micromessenger") > 0 )) {
-			//	model.addAttribute("errorMsg", "请在微信浏览器中进行支付");
-			//	return page; 
+				model.addAttribute("errorMsg", "请在微信浏览器中进行支付");
+				return page; 
 			}
 			
 			String redirectUrl = SysConfig.payService + "/weixinPay/debitNoteAuthCallBack";
