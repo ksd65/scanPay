@@ -239,7 +239,7 @@ public class BankPayController {
 					model.addAttribute("v_txnAmt", payMoney);
 					model.addAttribute("v_sign", responseJson.getString("signStr"));
 					page = "payment/cjBankSubmit";
-				}else if(DataDicConstant.ESKWG_ROUTE_CODE.equals(routeCode)){
+				}else if(DataDicConstant.ESKWG_ROUTE_CODE.equals(routeCode)||DataDicConstant.ESKWGD0_ROUTE_CODE.equals(routeCode)){
 					String payUrl = responseJson.getString("payUrl");
 					
 					model.addAttribute("action", payUrl);
