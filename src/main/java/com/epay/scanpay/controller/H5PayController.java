@@ -339,6 +339,7 @@ public class H5PayController {
 			String ip = request.getParameter("ip");
 			String payType = request.getParameter("payType");
 			String agent = request.getHeader("user-agent");
+			String ipReal = IpUtils.getIpAddress(request);
 			logger.info("进入请求toQqH5");
 			logger.info("memberCode="+memberCode);
 			logger.info("callbackUrl="+callbackUrl);
@@ -348,6 +349,7 @@ public class H5PayController {
 			logger.info("payType="+payType);
 			logger.info("sceneInfo="+sceneInfo);
 			logger.info("ip="+ip);
+			logger.info("ipReal="+ipReal);
 			logger.info("agent="+agent);
 			
 			if(payMoney==null || "".equals(payMoney)){
@@ -399,6 +401,7 @@ public class H5PayController {
 			reqData.put("signStr", signStr);
 			reqData.put("payType", payType);
 			reqData.put("userAgent", agent);
+			reqData.put("ipReal", ipReal);
 			
 			JSONObject responseJson = JSONObject.fromObject(
 					HttpUtil.sendPostRequest(SysConfig.pospService + "/api/debitNote/wxH5Pay",
@@ -628,5 +631,8 @@ public class H5PayController {
 		return page;
 		
 	}
+	
+	
+	
 
 }
