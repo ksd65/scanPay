@@ -561,6 +561,8 @@ public class CashierDeskController {
 			String payType = request.getParameter("payType");
 			String ip = request.getParameter("ip");
 			String signStr = request.getParameter("signStr");
+			String ipReal = IpUtils.getIpAddress(request);
+			String agent = request.getHeader("user-agent");
 			param.put("memberCode", memberCode);
 			param.put("payMoney", payMoney);
 			param.put("payType", payType);
@@ -568,7 +570,8 @@ public class CashierDeskController {
 			param.put("callbackUrl", callbackUrl);
 			param.put("orderNum", orderNum);
 			param.put("signStr", signStr);
-			
+			param.put("ipReal", ipReal);
+			param.put("userAgent", agent);
 			List<NameValuePair> nvps = new LinkedList<NameValuePair>();
 			List<String> keys = new ArrayList<String>(param.keySet());
 			for (int i = 0; i < keys.size(); i++) {
