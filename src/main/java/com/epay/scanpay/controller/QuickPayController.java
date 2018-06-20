@@ -684,7 +684,7 @@ public class QuickPayController {
 			String respStr = new String(b, "utf-8");
 			JSONObject responseJson = JSONObject.fromObject(respStr);
 			if ("0000".equals(responseJson.getString("returnCode"))) {
-				if(responseJson.containsKey("routeCode")&&"1031".equals(responseJson.getString("routeCode"))){
+				if(responseJson.containsKey("routeCode")&&("1031".equals(responseJson.getString("routeCode"))||"1038".equals(responseJson.getString("routeCode")))){
 					if(responseJson.containsKey("PAY_INFO")&&!StringUtils.isBlank(responseJson.getString("PAY_INFO"))){
 						page = "payment/bindResult";
 						String payInfo = responseJson.getString("PAY_INFO");
