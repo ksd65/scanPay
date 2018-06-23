@@ -43,6 +43,8 @@
     <input type="hidden" id="bankYxq" name="bankYxq" value="${bankYxq }"/>
     <input type="hidden" id="tel" name="tel" value="${tel }"/>
     <input type="hidden" id="certNbr" name="certNbr" value="${certNbr }"/>
+    <input type="hidden" id="callbackUrl" name="callbackUrl" value="${callbackUrl }"/>
+  <!--   <input type="hidden" id="frontUrl" name="frontUrl" value="${frontUrl }"/> -->
     <input type="hidden" id="signStr" name="signStr" value="${signStr }"/>
     
 </form>

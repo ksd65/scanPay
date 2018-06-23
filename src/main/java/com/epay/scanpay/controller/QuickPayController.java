@@ -583,6 +583,8 @@ public class QuickPayController {
 			String certNbr = request.getParameter("certNbr");
 			String bankCvv = request.getParameter("bankCvv");
 			String bankYxq = request.getParameter("bankYxq");
+			String callbackUrl = request.getParameter("callbackUrl");
+			String frontUrl = request.getParameter("frontUrl");
 			param.put("memberCode", memberCode);
 			param.put("bankCode", bankCode);
 			param.put("accountType", accountType);
@@ -601,6 +603,16 @@ public class QuickPayController {
 				bankYxq = "";
 			}else{
 				param.put("bankYxq", bankYxq);
+			}
+			if(StringUtils.isBlank(callbackUrl)){
+				callbackUrl = "";
+			}else{
+				param.put("callbackUrl", callbackUrl);
+			}
+			if(StringUtils.isBlank(frontUrl)){
+				frontUrl = "";
+			}else{
+				param.put("frontUrl", frontUrl);
 			}
 			
 			
@@ -623,6 +635,8 @@ public class QuickPayController {
 			model.addAttribute("tel", tel);
 			model.addAttribute("certNbr", certNbr);
 			model.addAttribute("bankYxq", bankYxq);
+			model.addAttribute("callbackUrl", callbackUrl);
+			model.addAttribute("frontUrl", frontUrl);
 			model.addAttribute("signStr", signstr);
 			
 			return "payment/bindCardConfirm";
@@ -652,6 +666,8 @@ public class QuickPayController {
 			String bankYxq = request.getParameter("bankYxq");
 			String signStr = request.getParameter("signStr");
 			String certNbr = request.getParameter("certNbr");
+			String callbackUrl = request.getParameter("callbackUrl");
+			String frontUrl = request.getParameter("frontUrl");
 			
 			Map<String,Object> reqData = new HashMap<String, Object>();
 			reqData.put("memberCode", memberCode);
@@ -665,7 +681,12 @@ public class QuickPayController {
 			reqData.put("bankYxq", bankYxq);
 			reqData.put("certNbr", certNbr);
 			reqData.put("signStr", signStr);
-			
+			if(!StringUtils.isBlank(callbackUrl)){
+				reqData.put("callbackUrl", callbackUrl);
+			}
+			if(!StringUtils.isBlank(frontUrl)){
+				reqData.put("frontUrl", frontUrl);
+			}
 			logger.info("进入请求bindCard,参数："+reqData.toString());
 			
 			
@@ -710,6 +731,10 @@ public class QuickPayController {
 		try {
 			JSONObject reqData = new JSONObject();
 			reqData.put("orderCode", request.getParameter("orderCode"));
+			
+			String str = HttpUtil.getPostString(request);
+			logger.info("bindCardNotify,参数："+str);
+
 			JSONObject result = JSONObject
 					.fromObject(HttpUtil.sendPostRequest(SysConfig.pospService + "/api/quickPay/queryBindCard",
 							CommonUtil.createSecurityRequstData(reqData)));

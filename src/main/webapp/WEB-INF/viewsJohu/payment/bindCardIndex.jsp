@@ -121,6 +121,8 @@
    <!-- <input type="hidden" id="memberCode" name="memberCode" value="9010000988"> --> 
 	<input type="hidden" id="memberCode" name="memberCode" value="9010000952">
 	<input type="hidden" id="orderNum" name="orderNum" value="${orderNum }">
+	<input type="hidden" id="callbackUrl" name="callbackUrl" value="http://47.97.175.195:8682/posp/quickPay/testCallBack">
+	<!--<input type="hidden" id="frontUrl" name="frontUrl" value="http://47.97.175.195:8682/test">-->
 	
     <table bordercolordark="#FFFFFF" bordercolorlight="#333333" align="center" bgcolor="#F0F0FF" border="1"
            cellpadding="3" cellspacing="0" width="400">
@@ -139,7 +141,7 @@
             <td>账户类型(*)</td>
             <td>
                 <select id="accountType" name="accountType" style="width: 115px">
-                <!-- 	<option value="1">借记卡</option> -->
+                <!----> 	<option value="1">借记卡</option> 
                     <option value="2">信用卡</option>
                 </select>
             </td>
