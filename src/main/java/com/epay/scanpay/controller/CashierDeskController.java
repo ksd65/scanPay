@@ -586,11 +586,31 @@ public class CashierDeskController {
 			String respStr = new String(b, "utf-8");
 			JSONObject responseJson = JSONObject.fromObject(respStr);
 			if ("0000".equals(responseJson.getString("returnCode"))) {
-				page = "payment/qrCode";
-				model.addAttribute("qrCode", responseJson.getString("qrCode"));
-				model.addAttribute("orderNum", orderNum);
-				model.addAttribute("payMoney", payMoney);
-				model.addAttribute("payType", payType);
+				String routeCode = "";
+				if(responseJson.containsKey("routeCode")){
+					routeCode = responseJson.getString("routeCode");
+				}
+				if(routeCode.equals(DataDicConstant.KQ_ROUTE_CODE)){
+					page = "payment/toKqPay";
+					model.addAttribute("action", responseJson.getString("payUrl"));
+					model.addAttribute("requestTime", responseJson.getString("requestTime"));
+					model.addAttribute("externalTraceNo", responseJson.getString("externalTraceNo"));
+					model.addAttribute("merchantCode", responseJson.getString("merchantCode"));
+					model.addAttribute("merchantId", responseJson.getString("merchantId"));
+					model.addAttribute("terminalId", responseJson.getString("terminalId"));
+					model.addAttribute("amt", responseJson.getString("amt"));
+					model.addAttribute("productInfo", responseJson.getString("productInfo"));
+					model.addAttribute("returnUrl", responseJson.getString("returnUrl"));
+					model.addAttribute("sign", responseJson.getString("sign"));
+				}else{
+					page = "payment/qrCode";
+					model.addAttribute("qrCode", responseJson.getString("qrCode"));
+					model.addAttribute("orderNum", orderNum);
+					model.addAttribute("payMoney", payMoney);
+					model.addAttribute("payType", payType);
+				}
+				
+				
 			}else{
 			    model.addAttribute("errorMsg", responseJson.getString("returnMsg"));
 			}

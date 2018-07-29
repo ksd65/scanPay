@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-<title>支付结果</title>
+<title>结果信息</title>
 <link href="${ctx }/css/main_style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -14,7 +14,7 @@
 <c:if test="${errorFlag!='1' }">
 <div class="zccgdiv">
 	<div class="zfcgmsg">
-		<span>支付结果：<b>失败</b></span>
+		<span>操作结果：<b>失败</b></span>
 		<p></p>
 		<span>失败描述：<b>${errorMsg}</b></span>
 	</div>
