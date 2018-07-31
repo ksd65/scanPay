@@ -332,6 +332,7 @@ public class H5PayController {
 			
 			String memberCode = request.getParameter("memberCode");
 			String callbackUrl = request.getParameter("callbackUrl");
+			String frontUrl = request.getParameter("frontUrl");
 			String signStr = request.getParameter("signStr");
 			String orderNum = request.getParameter("orderNum");
 			String payMoney = request.getParameter("payMoney");
@@ -343,6 +344,7 @@ public class H5PayController {
 			logger.info("进入请求toQqH5");
 			logger.info("memberCode="+memberCode);
 			logger.info("callbackUrl="+callbackUrl);
+			logger.info("frontUrl="+frontUrl);
 			logger.info("signStr="+signStr);
 			logger.info("orderNum="+orderNum);
 			logger.info("payMoney="+payMoney);
@@ -391,6 +393,9 @@ public class H5PayController {
 			if(payType==null || "".equals(payType)){
 				payType = "";
 			}
+			if(frontUrl==null || "".equals(frontUrl)){
+				frontUrl = "";
+			}
 			JSONObject reqData = new JSONObject();
 			reqData.put("memberCode", memberCode);
 			reqData.put("orderNum", orderNum);
@@ -402,6 +407,7 @@ public class H5PayController {
 			reqData.put("payType", payType);
 			reqData.put("userAgent", agent);
 			reqData.put("ipReal", ipReal);
+			reqData.put("frontUrl", frontUrl);
 			
 			JSONObject responseJson = JSONObject.fromObject(
 					HttpUtil.sendPostRequest(SysConfig.pospService + "/api/debitNote/wxH5Pay",
@@ -632,7 +638,40 @@ public class H5PayController {
 		
 	}
 	
-	
+	@RequestMapping("/payment/toUrl")
+	public String toUrl(Model model,HttpServletRequest request){
+		String page = "payment/fail";
+		try { // 获取页面请求信息
+			String ticket = request.getParameter("ticket");
+			logger.info("进入请求toUrl,ticket="+ticket);
+			
+			if(ticket==null || "".equals(ticket)){
+				model.addAttribute("errorMsg", "ticket为空");
+				return page;
+			}
+			
+			JSONObject reqData = new JSONObject();
+			reqData.put("ticket", ticket);
+			
+			JSONObject responseJson = JSONObject.fromObject(
+					HttpUtil.sendPostRequest(SysConfig.pospService + "/api/cashierDesk/getPayUrl",
+							CommonUtil.createSecurityRequstData(reqData)));
+			if ("0000".equals(responseJson.getString("returnCode"))) {
+				String payUrl = responseJson.getString("payUrl");
+				page = "payment/wxH5Submit";
+				
+				model.addAttribute("payUrl", payUrl);
+				
+				logger.info("调服务返回payUrl="+payUrl);
+			}else{
+			    model.addAttribute("errorMsg", responseJson.getString("returnMsg"));
+			}
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return page;
+		
+	}
 	
 
 }

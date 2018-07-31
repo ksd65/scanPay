@@ -590,7 +590,7 @@ public class CashierDeskController {
 				if(responseJson.containsKey("routeCode")){
 					routeCode = responseJson.getString("routeCode");
 				}
-				if(routeCode.equals(DataDicConstant.KQ_ROUTE_CODE)){
+			/*	if(routeCode.equals(DataDicConstant.KQ_ROUTE_CODE)){
 					page = "payment/toKqPay";
 					model.addAttribute("action", responseJson.getString("payUrl"));
 					model.addAttribute("requestTime", responseJson.getString("requestTime"));
@@ -602,13 +602,13 @@ public class CashierDeskController {
 					model.addAttribute("productInfo", responseJson.getString("productInfo"));
 					model.addAttribute("returnUrl", responseJson.getString("returnUrl"));
 					model.addAttribute("sign", responseJson.getString("sign"));
-				}else{
+				}else{*/
 					page = "payment/qrCode";
 					model.addAttribute("qrCode", responseJson.getString("qrCode"));
 					model.addAttribute("orderNum", orderNum);
 					model.addAttribute("payMoney", payMoney);
 					model.addAttribute("payType", payType);
-				}
+			//	}
 				
 				
 			}else{
